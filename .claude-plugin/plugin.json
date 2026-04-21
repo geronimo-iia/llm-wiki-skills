@@ -1,0 +1,9 @@
+{
+  "name": "llm-wiki",
+  "version": "0.1.0",
+  "description": "Skills for the llm-wiki engine — ingest, search, enrich, audit.",
+  "author": { "name": "geronimo-iia" },
+  "license": "MIT OR Apache-2.0",
+  "repository": "https://github.com/geronimo-iia/llm-wiki-skills",
+  "keywords": ["wiki", "knowledge-base", "mcp", "git", "skills"]
+}
