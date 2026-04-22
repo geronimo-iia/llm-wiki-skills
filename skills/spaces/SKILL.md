@@ -23,6 +23,8 @@ space is marked as the default — all commands target it unless
 `--wiki <name>` is specified.
 
 Use this skill to manage spaces after the initial setup.
+When called from a running server, create, remove, and set-default
+take effect immediately — no restart needed.
 
 ## Repository layout
 

@@ -65,6 +65,8 @@ llm-wiki schema list
 ```
 
 The MCP plugin (`.mcp.json`) starts `llm-wiki serve` automatically —
-MCP tools become available in the next agent session.
+MCP tools become available in the next agent session. Creating a wiki
+while the server is already running takes effect immediately — no
+restart needed.
 
 To manage additional wikis later, see the [spaces](../spaces/SKILL.md) skill.
