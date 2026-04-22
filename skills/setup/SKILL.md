@@ -1,96 +1,66 @@
 ---
 name: setup
 description: >
-  Install llm-wiki and manage wiki spaces. Create new wikis, set
-  defaults, list and remove spaces. Use when the user says "set up",
-  "install", "create a wiki", "add a wiki", "remove a wiki",
-  "list wikis", or when llm-wiki is not yet installed.
+  Install llm-wiki and create the first wiki. Use when the user says
+  "set up", "install", "create a wiki", or when llm-wiki is not yet
+  installed.
 type: skill
 status: active
 last_updated: "2025-07-18"
 disable-model-invocation: true
-argument-hint: "[create|list|remove] [--name <name>] [--path <path>]"
-tags: [setup, install, spaces, configuration]
-owner: geronimo
+argument-hint: "[--name <name>] [--path <path>]"
+tags: [setup, install]
+owner: jguibert@gmail.com
+metadata:
+  version: "0.4.0"
 ---
 
 # Setup
 
-Install the llm-wiki engine and manage wiki spaces.
-
-## MCP tools used
-
-- `wiki_spaces_create` — initialize a new wiki repo + register space
-- `wiki_spaces_list` — list all registered wikis
-- `wiki_spaces_remove` — remove a wiki from the registry
-- `wiki_spaces_set_default` — set the default wiki
-- `wiki_config` — read/write configuration values
+Install the llm-wiki engine and create the first wiki. All steps use
+**CLI commands only** — MCP tools are not available until the engine
+is installed and serving.
 
 ## Steps
 
 ### 1. Check installation
 
-Run `which llm-wiki` or `llm-wiki --help` to verify the binary is
-available.
-
-If not installed, guide the user:
-
-- From source: `cargo install llm-wiki`
-- From GitHub releases: download the binary for the user's platform
-
-### 2. Create a wiki
-
-```
-wiki_spaces_create(path: "<path>", name: "<name>")
+```bash
+which llm-wiki && llm-wiki --version
 ```
 
-This initializes a git repository at `<path>` with the standard
-directory structure (`inbox/`, `raw/`, `wiki/`, `schemas/`,
-`wiki.toml`) and registers it in the global config.
+If not installed, pick one method
+([full guide](https://github.com/geronimo-iia/llm-wiki/blob/main/docs/guides/installation.md)):
 
-Optional parameters:
-- `description` — one-line description of the wiki's purpose
-- `force` — update the space entry if the name already exists
-- `set_default` — set this wiki as the default
+| Method                      | Command                                                                                                      |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Quick install (macOS/Linux) | `curl -fsSL https://raw.githubusercontent.com/geronimo-iia/llm-wiki/main/install.sh \| bash`                 |
+| Quick install (Windows)     | `irm https://raw.githubusercontent.com/geronimo-iia/llm-wiki/main/install.ps1 \| iex`                        |
+| Homebrew                    | `brew tap geronimo-iia/tap && brew install llm-wiki`                                                         |
+| asdf                        | `asdf plugin add llm-wiki https://github.com/geronimo-iia/asdf-llm-wiki.git && asdf install llm-wiki latest` |
+| Cargo (from source)         | `cargo install llm-wiki`                                                                                     |
+| Cargo (pre-built)           | `cargo binstall llm-wiki`                                                                                    |
 
-### 3. Set as default
+### 2. Create the first wiki
 
-If this is the first wiki or the user wants it as default:
+Determine the wiki name and description from the conversation context
+(project name, topic, stated purpose). If unclear, ask the user for
+a short name and one-line description.
 
-```
-wiki_spaces_set_default(name: "<name>")
-```
-
-### 4. Verify
-
-```
-wiki_config(action: "list")
-```
-
-Confirm the wiki is registered and configuration is correct.
-
-### 5. List existing wikis
-
-```
-wiki_spaces_list()
+```bash
+llm-wiki spaces create <path> --name <name> --set-default
 ```
 
-### 6. Remove a wiki
+This initializes a git repo with the standard layout (`inbox/`,
+`raw/`, `wiki/`, `schemas/`, `wiki.toml`) and registers it as the
+default wiki.
 
+### 3. Verify
+
+```bash
+llm-wiki spaces list
+llm-wiki schema list
 ```
-wiki_spaces_remove(name: "<name>")
-```
 
-Add `delete: true` to also delete the wiki directory from disk.
-
-## Additional operations
-
-- **Add a second wiki** — repeat step 2 with a different name and path.
-- **Rename a wiki** — use `wiki_spaces_create` with `force: true` on
-  the same path with the new name.
-- **Directory structure** — every wiki has:
-  - `inbox/` — drop zone for files to process
-  - `raw/` — immutable archive of original sources
-  - `wiki/` — compiled knowledge (where pages live)
-  - `schemas/` — JSON Schema files for type validation
-  - `wiki.toml` — per-wiki configuration and type registry
+The MCP plugin (`.mcp.json`) starts `llm-wiki serve` automatically —
+MCP tools become available in the next agent session.
