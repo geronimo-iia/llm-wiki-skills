@@ -1,95 +1,135 @@
 ---
 name: lint
 description: >
-  Audit wiki structure for orphan pages, missing stubs, empty
-  sections, and broken links. Offer to fix issues. Use when the
-  user says "lint", "audit", "check structure", or "find problems".
+  Audit wiki quality — orphan pages, broken links, empty sections,
+  edge target type mismatches, and schema integrity.
 type: skill
 status: active
-last_updated: "2025-07-18"
+last_updated: "2025-07-21"
 disable-model-invocation: true
+when_to_use: >
+  Auditing wiki structure, checking for broken links or orphan pages,
+  validating schemas, or verifying graph integrity after content
+  changes.
 tags: [lint, audit, quality, structure]
-owner: geronimo
+owner: jguibert@gmail.com
+metadata:
+  version: "0.2.0"
 ---
 
 # Lint
 
-Structural audit — find orphans, missing stubs, empty sections, and
-broken links. Offer to fix issues automatically.
+Structural audit of the wiki. Find quality issues, report them, and
+offer fixes.
 
-## MCP tools used
+## Schema integrity
 
-- `wiki_list` — get all pages with type/status filters
-- `wiki_content_read` — read page frontmatter and body
-- `wiki_search` — find candidate connections
-- `wiki_content_write` — write fixes
-- `wiki_ingest` — validate and index fixes
+Validate all schema files for correctness and index compatibility:
 
-## Steps
+```
+wiki_schema(action: "validate")
+```
 
-### 1. List all pages
+Checks: valid JSON Schema, `x-wiki-types` presence, alias resolution,
+base schema invariant (`default` type requires `title` and `type`),
+and full index compatibility (no field conflicts across schemas).
+
+Validate a single type:
+
+```
+wiki_schema(action: "validate", type: "<type>")
+```
+
+## Edge target type validation
+
+Use dry-run ingest to check for edge target type mismatches without
+modifying the index:
+
+```
+wiki_ingest(path: "<path>", dry_run: true)
+```
+
+The engine reads `x-graph-edges` from the type's schema and warns
+when an edge target has the wrong type. For example:
+
+- A concept with `sources` pointing to another concept instead of a
+  source type (`fed-by` expects source types)
+- A source page with `concepts` pointing to a paper instead of a
+  concept (`informs` expects `concept`)
+
+## Orphan detection
+
+Pages with no inbound links from `sources`, `concepts`, or body
+`[[wikilinks]]` are orphans.
+
+Generate the graph and look for isolated nodes:
+
+```
+wiki_graph()
+```
+
+## Broken links
+
+Frontmatter fields (`sources`, `concepts`, `document_refs`,
+`superseded_by`) and body `[[wikilinks]]` may reference slugs that
+don't exist in the index.
+
+Read each page and check referenced slugs against the page list:
 
 ```
 wiki_list(page_size: 100)
+wiki_content_read(uri: "<slug>")
 ```
 
-Paginate through all pages. Collect slug, type, status, and title for
-each.
+## Empty sections
 
-### 2. Check each page
+Sections with no child pages underneath:
 
-For each page, read its content and check:
+```
+wiki_list(type: "section", page_size: 50)
+```
 
-#### Orphan detection
+For each section, check if any pages exist under that slug prefix.
 
-Does this page have backlinks? Check if any other page references it
-in `sources`, `concepts`, or body `[[wikilinks]]`. Pages with no
-inbound links are orphans.
+## Missing stubs
 
-#### Broken links
+Referenced slugs that don't exist. These are candidates for new pages
+— create stubs with minimal frontmatter or remove the dead reference.
 
-Do the slugs in `sources` and `concepts` frontmatter resolve to
-existing pages? Read the page and check each slug against the page
-list.
+## Untyped sources
 
-#### Empty sections
-
-If the page is `type: section`, does it have children? A section with
-no pages underneath is empty.
-
-#### Missing stubs
-
-Do `sources` or `concepts` reference slugs that don't exist? These
-are missing stubs that should be created.
-
-#### Untyped sources
-
-Pages with `type: source-summary` or missing type that appear to be
-source summaries should use a specific source type (`paper`, `article`,
+Pages with a generic or missing type that appear to be source
+summaries should use a specific source type (`paper`, `article`,
 `documentation`, etc.).
 
-### 3. Report findings
+## Report findings
 
 Present findings grouped by category:
 
+- **Schema issues** — invalid schemas, field conflicts
+- **Edge type mismatches** — wrong target types on graph edges
 - **Orphan pages** — no inbound links
-- **Broken links** — frontmatter references non-existent slugs
+- **Broken links** — references to non-existent slugs
 - **Empty sections** — sections with no children
 - **Missing stubs** — referenced pages that don't exist
 - **Untyped sources** — source pages without specific types
 
-### 4. Offer fixes
+## Fix issues
 
-For each category, offer to fix:
+For each category:
 
-- **Missing stubs** — create stub pages with minimal frontmatter
-- **Empty sections** — suggest pages to move or create under the section
-- **Broken links** — remove dead references or create the missing pages
-- **Orphan pages** — suggest connections to existing pages
+- **Schema issues** — fix the schema file, then
+  `wiki_schema(action: "validate")`
+- **Edge type mismatches** — fix the frontmatter field, then
+  `wiki_ingest(path: "<path>")`
+- **Missing stubs** — create stub pages with
+  `wiki_content_new(uri: "<slug>", type: "<type>")`
+- **Broken links** — remove dead references or create the missing
+  pages
+- **Orphan pages** — add links from related pages
+- **Empty sections** — create or move pages under the section
 
-### 5. Apply fixes
-
-For each accepted fix:
+After each fix, write and ingest:
 
 ```
 wiki_content_write(uri: "<slug>", content: "<fixed content>")

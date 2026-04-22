@@ -2,9 +2,10 @@
 
 Skills for the [llm-wiki](https://github.com/geronimo-iia/llm-wiki) engine.
 
-A Claude Code plugin that teaches agents how to use llm-wiki — ingest
-sources, crystallize sessions, search knowledge, audit structure, and
-more. Also usable by any agent platform that reads SKILL.md files.
+A Claude Code plugin that teaches agents how to use llm-wiki — manage
+spaces, ingest sources, crystallize sessions, search knowledge, audit
+structure, and more. Also usable by any agent platform that reads
+SKILL.md files.
 
 ## Prerequisites
 
@@ -40,32 +41,37 @@ claude --plugin-dir ./llm-wiki-skills
 
 ## Skill Inventory
 
-| Skill            | Invocation                 | Description                                             |
-| ---------------- | -------------------------- | ------------------------------------------------------- |
-| `setup`          | `/llm-wiki:setup`          | Install llm-wiki and manage wiki spaces                 |
-| `bootstrap`      | Auto (session start)       | Orient to a wiki — read config, types, hub pages        |
-| `ingest`         | `/llm-wiki:ingest`         | Process source files into synthesized wiki pages        |
-| `crystallize`    | `/llm-wiki:crystallize`    | Distil the current session into durable wiki pages      |
-| `research`       | Auto + manual              | Search the wiki and synthesize an answer                |
-| `lint`           | `/llm-wiki:lint`           | Structural audit — orphans, stubs, broken links         |
-| `graph`          | `/llm-wiki:graph`          | Generate and interpret the concept graph                |
-| `frontmatter`    | Auto (background)          | Reference for writing correct frontmatter               |
-| `skill`          | Auto + manual              | Find and activate skills stored in the wiki             |
-| `write-page`     | `/llm-wiki:write-page`     | Create a wiki page of any type with correct frontmatter |
-| `configure-hugo` | `/llm-wiki:configure-hugo` | Configure a wiki for Hugo rendering                     |
+| Skill             | Invocation                 | Description                                             |
+| ----------------- | -------------------------- | ------------------------------------------------------- |
+| `setup`           | `/llm-wiki:setup`          | Install llm-wiki and create the first wiki              |
+| `spaces`          | `/llm-wiki:spaces`         | Manage wiki spaces — create, list, inspect, remove      |
+| `config`          | `/llm-wiki:config`         | Read, write, and understand wiki configuration          |
+| `schema`          | `/llm-wiki:schema`         | Understand and manage the type system                   |
+| `bootstrap`       | Auto (session start)       | Orient to a wiki — read config, types, hub pages        |
+| `content`         | `/llm-wiki:content`        | Read, create, update pages and sections                 |
+| `ingest`          | `/llm-wiki:ingest`         | Process source files into synthesized wiki pages        |
+| `crystallize`     | Auto + manual              | Distil the current session into durable wiki pages      |
+| `research`        | Auto + manual              | Search the wiki and synthesize an answer                |
+| `lint`            | `/llm-wiki:lint`           | Audit quality — orphans, broken links, schema integrity |
+| `graph`           | `/llm-wiki:graph`          | Generate and interpret the concept graph                |
+| `frontmatter`     | Auto (background)          | Reference for writing correct frontmatter               |
+| `skill-discovery` | Auto + manual              | Find and activate skills stored in the wiki             |
+| `configure-hugo`  | `/llm-wiki:configure-hugo` | Configure a wiki for Hugo rendering                     |
 
 ## How Skills Relate to MCP Tools
 
-The engine exposes 15 MCP tools — stateful primitives for space
+The engine exposes MCP tools — stateful primitives for space
 management, content operations, search, and graph traversal. Skills
-orchestrate these tools into multi-step workflows.
+orchestrate these tools into workflows.
 
-| Tool group       | Tools                                                                                              | Used by skills                                            |
-| ---------------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| Space management | `wiki_spaces_create`, `wiki_spaces_list`, `wiki_spaces_remove`, `wiki_spaces_set_default`          | setup, bootstrap                                          |
-| Configuration    | `wiki_config`                                                                                      | setup, bootstrap, frontmatter, write-page, configure-hugo |
-| Content          | `wiki_content_read`, `wiki_content_write`, `wiki_content_new`, `wiki_content_commit`               | ingest, crystallize, lint, write-page                     |
-| Search & index   | `wiki_search`, `wiki_list`, `wiki_ingest`, `wiki_graph`, `wiki_index_rebuild`, `wiki_index_status` | All skills                                                |
+| Tool group       | Tools                                                                                     | Used by skills                             |
+| ---------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------ |
+| Space management | `wiki_spaces_create`, `wiki_spaces_list`, `wiki_spaces_remove`, `wiki_spaces_set_default` | setup, spaces                              |
+| Configuration    | `wiki_config`                                                                             | config, bootstrap                          |
+| Schema           | `wiki_schema`                                                                             | schema, frontmatter, content, ingest, lint |
+| Content          | `wiki_content_read`, `wiki_content_write`, `wiki_content_new`, `wiki_content_commit`      | content, ingest, crystallize, lint         |
+| Search & index   | `wiki_search`, `wiki_list`, `wiki_ingest`, `wiki_index_rebuild`, `wiki_index_status`      | research, content, ingest, lint            |
+| Graph            | `wiki_graph`                                                                              | graph, research, lint, crystallize         |
 
 The engine is a dumb pipe. Skills are the brain.
 
@@ -84,12 +90,11 @@ and work with any agent platform that reads Markdown skill files.
 
 ## License
 
-[MIT](http://opensource.org/licenses/MIT) OR
-[Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+[MIT](LICENSE-MIT) OR [Apache-2.0](LICENSE-APACHE)
 
+## Future improvements
 
-## Futur improvement
+- Transform the layout as a llm-wiki
+- Create knowledge pages about llm-wiki architecture (DKR model,
+  inbox→raw→wiki flow, index engine)
 
-- transform the layout as a llm-wiki
-- create knowledge about llm-wiki, epistemologic model, etc
-- extend skill with automatic usage of the search engine

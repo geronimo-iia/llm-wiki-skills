@@ -2,45 +2,58 @@
 
 ## Current State
 
-11 skills written for the initial engine (Phase 1+2). Skills need
-updating to reflect Phase 3 (typed graph edges) and engine refactoring
-(renamed tools, new features).
+14 skills covering the full engine surface. All skills updated to
+reflect Phase 3 (typed graph edges), engine refactoring (renamed
+tools, new features), and consistent goal-oriented style.
 
 ## Skills Inventory
 
-| Skill | Status | Needs update? |
-|-------|--------|---------------|
-| `setup` | written | Yes — install methods changed (install.sh, homebrew, asdf) |
-| `bootstrap` | written | Yes — tool names changed, `wiki_schema` tool added |
-| `ingest` | written | Yes — edge target warnings, `wiki_schema validate` |
-| `crystallize` | written | Review — may reference old tool names |
-| `research` | written | Review — `--all` renamed to `--cross-wiki` |
-| `lint` | written | Yes — add type constraint violation detection via graph edges |
-| `graph` | written | Yes — relation-aware instructions (`--relation`, `x-graph-edges`) |
-| `frontmatter` | written | Yes — update type taxonomy with `x-graph-edges` declarations |
-| `skill` | written | Review — may reference old tool names |
-| `write-page` | written | Yes — `wiki_schema show --template` may have changed |
-| `configure-hugo` | written | Review — hugo-cms project now has its own docs |
+| Skill             | Status  | Notes                                                                       |
+| ----------------- | ------- | --------------------------------------------------------------------------- |
+| `setup`           | updated | First-time install, neutral tone                                            |
+| `spaces`          | updated | Space management with repository layout                                     |
+| `schema`          | updated | Full type system — epistemic roles, edges, aliasing                         |
+| `config`          | new     | Config operations, key reference, resolution order                          |
+| `bootstrap`       | updated | Session orientation, neutral tone                                           |
+| `content`         | updated | Renamed from `write-page` — read, create, update, sections, bundles, assets |
+| `ingest`          | updated | Inbox→raw workflow, neutral tone                                            |
+| `crystallize`     | updated | Session→page, LLM can propose                                               |
+| `research`        | updated | Search, graph exploration, cross-wiki                                       |
+| `lint`            | updated | Schema validation, edge type checks                                         |
+| `graph`           | updated | Edge system, relation filtering, composable filters                         |
+| `frontmatter`     | updated | Field conventions, graph edges, aliasing                                    |
+| `skill-discovery` | updated | Renamed from `skill` — proactive discovery                                  |
+| `configure-hugo`  | written | Review — hugo-cms project now has its own docs                              |
 
-## Phase 1 — Sync with Engine
+## Phase 1 — Sync with Engine ✓
 
-Update all skills to match the current engine state.
+All skills updated to match the current engine state.
 
-- [ ] Audit each SKILL.md for stale tool names
-- [ ] Update `setup` with new install methods
-- [ ] Update `bootstrap` with `wiki_schema` tool
-- [ ] Update `research` with `--cross-wiki` flag
-- [ ] Update `graph` with relation filtering and `x-graph-edges`
-- [ ] Update `lint` with edge target type validation
-- [ ] Update `frontmatter` type taxonomy with edge declarations
-- [ ] Update `ingest` with edge target warnings
-- [ ] Test with `claude --plugin-dir ./llm-wiki-skills`
+### Completed
+
+- [x] Consistent goal-oriented style across all skills (not sequential steps)
+- [x] Neutral tone in frontmatter (`description`, `when_to_use`) — works for both users and LLMs
+- [x] Tool names: `wiki_content_read`, `wiki_content_write`, `wiki_content_new`, `wiki_content_commit`
+- [x] `--cross-wiki` flag (not `--all`) for cross-wiki search
+- [x] `wiki_graph --relation <label>` for relation filtering
+- [x] `x-graph-edges` documented per type (concept, source, doc, skill)
+- [x] Composable graph filters: `--type`, `--relation`, `--root`, `--depth`
+- [x] Edge target type validation via `wiki_ingest --dry-run`
+- [x] `wiki_schema validate` for schema integrity
+- [x] `wiki_schema show <type> --template` for frontmatter scaffolding
+- [x] Page anatomy: flat vs bundle, assets, slug resolution
+- [x] Accumulation contract in content and crystallize skills
+- [x] `write-page` → `content` (broader scope: read, create, update, sections)
+- [x] `skill` → `skill-discovery` (clearer name)
+- [x] `crystallize` allows LLM-initiated proposals
+- [x] `skill-discovery` allows proactive search
+- [x] New `config` skill with full key reference
+- [x] New `spaces` skill with repository layout
 
 ## Phase 2 — New Skills
 
 Skills for new engine capabilities.
 
-- [ ] `multi-wiki` — manage multiple wikis, cross-wiki workflows
 - [ ] `custom-type` — guide for creating custom page types with schemas
 - [ ] `ci-cd` — set up CI/CD validation and deployment
 
@@ -49,3 +62,4 @@ Skills for new engine capabilities.
 - Skill composition (`extends` field)
 - Skill versioning (track which engine version a skill targets)
 - Automated skill testing
+- Review `configure-hugo` — may be obsolete or need its own repo

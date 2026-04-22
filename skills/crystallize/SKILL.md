@@ -1,32 +1,28 @@
 ---
 name: crystallize
 description: >
-  Distil the current session into durable wiki pages. Extract
-  decisions, findings, and open questions. Update existing pages
-  or create new ones. Use when the user says "crystallize",
-  "save this", "write this up", or at the end of a productive session.
+  Distil a session into durable wiki pages — extract decisions,
+  findings, and open questions into concept or query-result pages.
 type: skill
 status: active
-last_updated: "2025-07-18"
-disable-model-invocation: true
+last_updated: "2025-07-21"
+when_to_use: >
+  Preserving session knowledge — decisions reached, patterns
+  discovered, questions resolved, or design rationale established.
+  Propose crystallization when a session produces durable knowledge;
+  always confirm with the user before writing.
 tags: [crystallize, session, knowledge-capture]
-owner: geronimo
+owner: jguibert@gmail.com
+metadata:
+  version: "0.2.0"
 ---
 
 # Crystallize
 
-Distil the current session into durable wiki pages. Valuable knowledge
-emerges from conversations — decisions reached, patterns discovered,
-questions resolved. Without crystallize, this knowledge disappears when
-the session ends.
-
-## MCP tools used
-
-- `wiki_search` — find existing pages that should be updated
-- `wiki_content_read` — read existing pages before updating
-- `wiki_content_write` — write pages into the wiki tree
-- `wiki_ingest` — validate, index, commit
-- `wiki_content_commit` — commit if auto_commit is off
+Distil a session into durable wiki pages. Valuable knowledge emerges
+from conversations — decisions reached, patterns discovered, questions
+resolved. Without crystallization, this knowledge disappears when the
+session ends.
 
 ## What to capture
 
@@ -37,12 +33,19 @@ design rationale.
 **Discard:** exploratory back-and-forth, dead ends, process chat,
 superseded drafts, corrections already incorporated.
 
-The output is always significantly shorter and more structured than the
-input. Crystallize distils — it does not transcribe.
+The output is always significantly shorter and more structured than
+the input. Crystallize distils — it does not transcribe.
 
-## Steps
+## When to crystallize
 
-### 1. Search for an existing home
+- A decision was reached → crystallize the decision and rationale
+- New knowledge was absorbed → crystallize into a concept page
+- A question was resolved → update the page that had the open question
+- A design was settled → crystallize into a query-result or concept
+- The chat is getting heavy → crystallize before context degrades
+- Closing a long thread → crystallize everything worth keeping
+
+## Search for an existing home
 
 Before creating anything new, search the wiki:
 
@@ -53,58 +56,76 @@ wiki_search(query: "<topic>")
 If a concept page, section index, or prior query-result already covers
 this ground, prefer updating it over creating a new page.
 
-### 2. Read existing pages
+Read candidates to check scope:
 
 ```
 wiki_content_read(uri: "<candidate-slug>")
 ```
 
-Check if the update fits the existing page's scope.
+## Create a new page
 
-### 3. Write the page
+When no existing page fits, use `type: query-result` for session
+conclusions or `type: concept` for synthesized knowledge.
 
-For a **new page** (no existing home found), use `type: query-result`:
-
-```yaml
----
-title: "Topic — Aspect"
-summary: "One sentence describing what was established."
-tldr: "The bottom line conclusion."
-read_when:
-  - "Reviewing decisions about <topic>"
-status: active
-last_updated: "2025-07-18"
-type: query-result
-tags: [relevant, tags]
-sources: [slugs/of/sources/used]
-concepts: [slugs/of/concepts/discussed]
-confidence: medium
----
-```
-
-For an **update** to an existing page:
-1. Read the current page with `wiki_content_read`
-2. Merge new knowledge — preserve existing frontmatter values, add new
-   tags/sources/claims, update body sections
-3. Write the complete updated file
+Get the frontmatter scaffold:
 
 ```
+wiki_schema(action: "show", type: "query-result", template: true)
+```
+
+Create and write:
+
+```
+wiki_content_new(uri: "<slug>", type: "query-result")
 wiki_content_write(uri: "<slug>", content: "<full markdown>")
 ```
 
-### 4. Ingest
+Set `sources` to the source pages that contributed claims, `concepts`
+to the concept pages discussed. These create typed graph edges
+(`fed-by` and `depends-on`).
+
+## Update an existing page
+
+Respect the accumulation contract:
+
+1. Read the current page: `wiki_content_read(uri: "<slug>")`
+2. Preserve existing list values (`tags`, `read_when`, `sources`,
+   `concepts`, `claims`) — add, do not replace
+3. Update scalar fields (`summary`, `tldr`, `confidence`) only with
+   clear reason
+4. Write the complete file:
 
 ```
-wiki_ingest(path: "<path-relative-to-wiki-root>")
+wiki_content_write(uri: "<slug>", content: "<updated markdown>")
 ```
 
-### 5. Verify
+## Validate and index
+
+Dry-run to catch errors (including edge target type mismatches):
+
+```
+wiki_ingest(path: "<path>", dry_run: true)
+```
+
+Then ingest for real:
+
+```
+wiki_ingest(path: "<path>")
+```
+
+## Verify
+
+Confirm the knowledge was captured correctly:
 
 ```
 wiki_content_read(uri: "<slug>")
 ```
 
-Confirm the knowledge was captured correctly.
+Check graph edges are connected as expected:
+
+```
+wiki_graph(root: "<slug>", depth: 1)
+```
 
 ## Suggested body structure
 
@@ -118,14 +139,3 @@ Adapt to the content — not every section is needed:
 | Current Understanding | When the session advanced understanding |
 | Open Questions | When questions remain unresolved |
 | Related Pages | When connections to other wiki pages are worth noting |
-
-## When to crystallize
-
-Use crystallize liberally:
-
-- A decision was reached → crystallize the decision and rationale
-- New knowledge was absorbed → crystallize into a concept page
-- A question was resolved → update the page that had the open question
-- A design was settled → crystallize into a query-result or concept page
-- The chat is getting heavy → crystallize before context degrades
-- Closing a long thread → crystallize everything worth keeping

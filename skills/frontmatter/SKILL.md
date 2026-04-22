@@ -1,15 +1,20 @@
 ---
 name: frontmatter
 description: >
-  Reference for writing correct wiki frontmatter. Covers required
-  fields, type conventions, per-type templates, and the accumulation
-  contract. Use when writing or updating wiki pages.
+  Reference for writing correct wiki frontmatter — required fields,
+  field conventions, type-specific validation, and the accumulation
+  contract.
 type: skill
 status: active
-last_updated: "2025-07-18"
+last_updated: "2025-07-21"
 user-invocable: false
+when_to_use: >
+  Writing or updating wiki pages — loaded automatically as background
+  reference for correct frontmatter fields and conventions.
 tags: [frontmatter, reference, types]
-owner: geronimo
+owner: jguibert@gmail.com
+metadata:
+  version: "0.2.0"
 ---
 
 # Frontmatter Reference
@@ -17,37 +22,40 @@ owner: geronimo
 Background knowledge for writing correct frontmatter in wiki pages.
 This skill is loaded automatically when writing wiki pages.
 
+For type system management (listing, adding, removing types), see the
+[schema](../schema/SKILL.md) skill. For the full type taxonomy, see
+[references/type-taxonomy.md](references/type-taxonomy.md).
+
+## Quick template
+
+Get the exact frontmatter scaffold for any type:
+
+```
+wiki_schema(action: "show", type: "<type>", template: true)
+```
+
 ## Required fields
 
 Every wiki page must have:
 
-```yaml
----
-title: "Page Title"
-summary: "One sentence describing the page's scope."
-read_when:
-  - "Situation when this page should be retrieved"
-status: active
-last_updated: "2025-07-18"
-type: concept
----
-```
-
 | Field | Rule |
 |-------|------|
 | `title` | Concise, specific, unambiguous |
-| `summary` | One sentence: what this page is about |
-| `read_when` | 2–5 retrieval conditions (situations, not keywords) |
-| `status` | `active` for new pages, `draft` for incomplete work |
-| `last_updated` | Today's ISO 8601 date |
-| `type` | Page type from the type registry (see type-taxonomy.md) |
+| `type` | Page type from the type registry |
+
+Additional required fields depend on the type:
+
+| Type | Extra required fields |
+|------|----------------------|
+| `concept`, `query-result` | `read_when` |
+| `skill` | `name`, `description` (instead of `title`, `summary`) |
 
 ## Field conventions
 
 ### title
 
 | Type | Convention | Example |
-|------|-----------|---------|
+|------|-----------|---------| 
 | `concept` | The concept name | "Mixture of Experts" |
 | `paper` | "Paper Title (Year)" | "Switch Transformer (2021)" |
 | `article` | "Article Title" | "Why MoE Models Are the Future" |
@@ -136,49 +144,48 @@ Who is responsible — a person, team, or agent session ID.
 ### superseded_by
 
 Slug of the page that replaces this one. Use when a page is
-effectively replaced, not for minor updates.
+effectively replaced, not for minor updates. Creates a
+`superseded-by` graph edge.
 
-## Type-specific validation
+## Graph edges from frontmatter fields
 
-The engine validates frontmatter against JSON Schema per type on
-`wiki_ingest`. Each type has required fields beyond the base:
+Certain frontmatter fields create typed graph edges at ingest:
 
-| Type | Required fields | Schema |
-|------|----------------|--------|
-| `concept`, `query-result` | `title`, `type`, `read_when` | `concept.json` |
-| `skill` | `name`, `description`, `type` | `skill.json` |
-| All source types | `title`, `type` | `paper.json` |
-| `doc` | `title`, `type` | `doc.json` |
-| `section` | `title`, `type` | `section.json` |
+| Type | Field | Relation | Target types |
+|------|-------|----------|--------------|
+| concept | `sources` | `fed-by` | All source types |
+| concept | `concepts` | `depends-on` | `concept` |
+| source types | `sources` | `cites` | All source types |
+| source types | `concepts` | `informs` | `concept` |
+| doc | `sources` | `informed-by` | All source types |
+| skill | `document_refs` | `documented-by` | `doc` |
+| any | `superseded_by` | `superseded-by` | Any |
 
-Use `wiki_schema show <type> --template` to get the exact frontmatter
-scaffold for any type. Use `wiki_schema list` to see all registered
-types.
+Body `[[wiki-links]]` get a generic `links-to` relation.
 
-Skill pages use `name`/`description` instead of `title`/`summary`.
-The engine aliases them at ingest time (`name` → `title`,
-`description` → `summary`, `when_to_use` → `read_when`).
+## Field aliasing
 
-## Per-type templates
+Skill pages use different field names. The engine aliases them at
+ingest time so they index uniformly:
 
-Get a template for any type:
+| Source field | Canonical field |
+|-------------|----------------|
+| `name` | `title` |
+| `description` | `summary` |
+| `when_to_use` | `read_when` |
 
-```
-wiki_schema(action: "show", type: "<type>", template: true)
-```
-
-See also `references/type-taxonomy.md` for the full type taxonomy.
+Aliases affect indexing only — files on disk are never rewritten.
 
 ## Accumulation contract
 
 When updating a page:
 
-1. **Read the current page first** — `wiki_content_read`
-2. **Preserve existing list values** — do not drop `tags`, `read_when`,
+1. Read the current page first — `wiki_content_read`
+2. Preserve existing list values — do not drop `tags`, `read_when`,
    `sources`, `concepts`, or `claims`
-3. **Add new values** to lists, do not replace them
-4. **Update scalar fields** only with clear reason
-5. **Write the complete file**, then `wiki_ingest`
+3. Add new values to lists, do not replace them
+4. Update scalar fields only with clear reason
+5. Write the complete file, then `wiki_ingest`
 
 ## Common mistakes
 

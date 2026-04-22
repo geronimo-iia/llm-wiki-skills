@@ -11,8 +11,13 @@ type: skill
 status: active
 last_updated: "2025-07-18"
 disable-model-invocation: true
+when_to_use: >
+  The user says "configure Hugo", "set up Hugo", "make this wiki
+  publishable", or wants to render the wiki as a static site.
 tags: [hugo, publishing, configuration]
-owner: geronimo
+owner: jguibert@gmail.com
+metadata:
+  version: "0.1.0"
 ---
 
 # Configure Hugo
@@ -26,12 +31,6 @@ matching Hugo configuration.
 The [llm-wiki-hugo-cms](https://github.com/geronimo-iia/llm-wiki-hugo-cms)
 scaffold must be present in the wiki repo. If not, instruct the user
 to clone or copy it first.
-
-## MCP tools used
-
-- `wiki_config` — read wiki name, description, registered types
-- `wiki_content_write` — write Hugo configuration files
-- `wiki_content_read` — read existing Hugo config if present
 
 ## Steps
 

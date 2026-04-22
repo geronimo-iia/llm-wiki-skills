@@ -1,27 +1,23 @@
 ---
 name: bootstrap
 description: >
-  Orient to a wiki space. Read configuration, understand types and
-  structure, review hub pages. Use at the start of every session or
-  when switching wikis.
+  Orient to a wiki space — read configuration, understand types and
+  structure, review hub pages.
 type: skill
 status: active
 last_updated: "2025-07-18"
+when_to_use: >
+  At the start of a session, when switching wikis, or when
+  orientation to a wiki's structure and content is needed.
 tags: [bootstrap, session, orientation]
-owner: geronimo
+owner: jguibert@gmail.com
+metadata:
+  version: "0.3.0"
 ---
 
 # Bootstrap
 
-Session orientation — bring the agent from zero to oriented using the
-wiki itself. Run at the start of every session or when switching wikis.
-
-## MCP tools used
-
-- `wiki_config` — read wiki name, description, settings
-- `wiki_schema` — list registered types and their descriptions
-- `wiki_list` — get the section structure
-- `wiki_content_read` — read hub pages for context
+Bring the agent from zero to oriented using the wiki itself.
 
 ## Steps
 
@@ -31,8 +27,7 @@ wiki itself. Run at the start of every session or when switching wikis.
 wiki_config(action: "list")
 ```
 
-Learn the wiki name, description, and key settings
-(`ingest.auto_commit`, `search.top_k`).
+Learn the wiki name, description, and key settings.
 
 ### 2. Discover types
 
@@ -40,51 +35,35 @@ Learn the wiki name, description, and key settings
 wiki_schema(action: "list")
 ```
 
-Learn what page types are registered, their descriptions, and which
-schema files they use. This tells you what kinds of pages the wiki
-contains.
+Learn what page types are registered. This tells you what kinds of
+pages the wiki contains.
 
-### 2. Get the section structure
+### 3. Get the section structure
 
 ```
 wiki_list(type: "section", page_size: 50)
 ```
 
-Sections are the wiki's organizational skeleton. Understanding them
-reveals what knowledge domains exist.
+If no sections exist, the wiki is empty — report this to the user
+and suggest using the ingest or write-page skills to start building
+content.
 
-### 3. Read hub pages
+### 4. Read hub pages
 
-For each key section, read its index page:
+For each key section (up to 5), read its index page:
 
 ```
 wiki_content_read(uri: "<section-slug>")
 ```
 
-Hub pages summarize an entire area of knowledge. They are the most
-valuable bootstrap targets because they provide context for everything
-underneath.
-
 Prioritize sections with the most children or the most inbound links.
+Skip this step if the wiki has no sections.
 
-### 4. Summarize
+### 5. Report to the user
 
-After reading config and hub pages, summarize:
+Present a brief orientation:
 
 - The wiki's scope and purpose
-- What knowledge domains exist
-- The current state of each domain (active, sparse, well-developed)
+- What knowledge domains exist (from sections)
+- The current state (empty, sparse, well-developed)
 - Any recent activity (check `last_updated` on hub pages)
-
-## The bootstrap loop
-
-Each session starts from a richer baseline than the last. The
-crystallize skill feeds back into bootstrap — every crystallized
-session updates hub pages, making the next bootstrap richer.
-
-```
-Session N:   bootstrap → work → crystallize → hub pages updated
-Session N+1: bootstrap → richer starting context → ...
-```
-
-The wiki is the accumulator. The agent is stateless — the wiki is not.

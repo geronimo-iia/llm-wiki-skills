@@ -1,14 +1,16 @@
 ---
 name: setup
 description: >
-  Install llm-wiki and create the first wiki. Use when the user says
-  "set up", "install", "create a wiki", or when llm-wiki is not yet
-  installed.
+  Install llm-wiki and create the first wiki. Use when llm-wiki is
+  not yet installed or needs initial setup.
 type: skill
 status: active
 last_updated: "2025-07-18"
 disable-model-invocation: true
 argument-hint: "[--name <name>] [--path <path>]"
+when_to_use: >
+  Installing llm-wiki for the first time, or creating the initial
+  wiki.
 tags: [setup, install]
 owner: jguibert@gmail.com
 metadata:
@@ -64,3 +66,5 @@ llm-wiki schema list
 
 The MCP plugin (`.mcp.json`) starts `llm-wiki serve` automatically —
 MCP tools become available in the next agent session.
+
+To manage additional wikis later, see the [spaces](../spaces/SKILL.md) skill.
