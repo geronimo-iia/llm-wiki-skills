@@ -25,7 +25,8 @@ before generating from scratch.
 ## Search
 
 BM25 full-text search across `title`, `summary`, `read_when`, `tldr`,
-`tags`, and body text:
+`tags`, and body text. Results always include facets (`type`, `status`,
+`tags` distributions):
 
 ```
 wiki_search(query: "<topic>")
@@ -63,6 +64,13 @@ pages that add context. A concept's `sources` field points to the
 source pages that contributed claims. A source's `concepts` field
 points to the concepts it informs.
 
+Check page freshness with `wiki_history` to assess whether the
+knowledge is current:
+
+```
+wiki_history(slug: "<slug>", limit: 1)
+```
+
 ## Explore relationships
 
 Use the graph to explore how pages connect:
@@ -88,6 +96,8 @@ This is useful for:
 
 Compose an answer from the wiki's knowledge:
 
+- Use the `type` facet to suggest broadening or narrowing the search
+  (e.g. "there are also 8 papers on this topic")
 - Cite sources with `wiki://` URIs (e.g. `wiki://concepts/moe`)
 - Distinguish between what concept pages say (synthesized knowledge)
   and what source pages claim (provenance)

@@ -166,6 +166,9 @@ A custom schema must be valid JSON Schema (Draft 2020-12) and should
 include `x-wiki-types`. The engine validates, copies it into
 `schemas/`, and confirms index resolution works.
 
+Optionally add a body template at `schemas/<type>.md` — it will be
+used by `wiki_content_new` when creating pages of this type.
+
 ## Remove a type
 
 ```

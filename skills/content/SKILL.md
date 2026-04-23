@@ -28,6 +28,10 @@ pages outside of the [ingest](../ingest/SKILL.md) (inbox→raw) and
 Content operations do not validate or index — that's what
 `wiki_ingest` does. Always ingest after writing.
 
+When `llm-wiki serve --watch` is active, external edits are indexed
+automatically — manual ingest is only needed for programmatic writes
+via `wiki_content_write`.
+
 ## Page anatomy
 
 A wiki page is a Markdown file with YAML frontmatter. The file is
@@ -124,6 +128,25 @@ Strip frontmatter with `no_frontmatter: true`.
 When a page has `superseded_by` set, the output includes a notice
 pointing to the replacement.
 
+## Page history
+
+```
+wiki_history(slug: "<slug>")
+```
+
+Returns git commit history for the page — hash, date, message,
+author. Use to assess freshness, track changes, or find the last
+ingest commit. Rename tracking is enabled by default (`--follow`).
+
+## Wiki overview
+
+```
+wiki_stats()
+```
+
+Returns page counts, type/status distribution, orphans, graph
+connectivity, staleness, and index health in one call.
+
 ## List pages
 
 ```
@@ -134,7 +157,8 @@ wiki_list(type: "section", page_size: 50)
 ```
 
 Paginated results ordered alphabetically by slug. Each entry includes
-slug, URI, title, type, status, and tags.
+slug, URI, title, type, status, and tags. Facets (`type`, `status`,
+`tags` distributions) are always included.
 
 ## Search pages
 
@@ -162,6 +186,10 @@ Create the page:
 ```
 wiki_content_new(uri: "<slug>", type: "<type>")
 ```
+
+The page is scaffolded with frontmatter and a body template based on
+the type (from `schemas/<type>.md`). For custom types, add a `.md`
+file next to the schema.
 
 For a bundle:
 
@@ -251,6 +279,38 @@ When committing by slug, the engine stages the right files:
 
 `wiki_ingest` commits automatically when `ingest.auto_commit` is
 true in the wiki config.
+
+## View page changes
+
+Use `wiki_history` to get commit hashes, then `git diff` to see
+what changed:
+
+```
+wiki_history(slug: "<slug>", limit: 2)
+```
+
+Then in bash:
+
+```bash
+git -C <repo_root> diff <from_hash> <to_hash> -- wiki/<slug>.md
+```
+
+For uncommitted changes (edits not yet ingested):
+
+```bash
+git -C <repo_root> diff -- wiki/<slug>.md
+```
+
+## Suggest links
+
+After creating or updating a page, suggest related pages to link:
+
+```
+wiki_suggest(slug: "<slug>")
+```
+
+Returns candidates with scores, reasons, and suggested frontmatter
+fields. Apply the backlink quality test before adding suggestions.
 
 ## Update related pages
 

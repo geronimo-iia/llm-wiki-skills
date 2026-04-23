@@ -69,4 +69,11 @@ MCP tools become available in the next agent session. Creating a wiki
 while the server is already running takes effect immediately — no
 restart needed.
 
+Add `--watch` to enable live indexing — external edits are indexed
+automatically within ~500ms:
+
+```
+llm-wiki serve --watch
+```
+
 To manage additional wikis later, see the [spaces](../spaces/SKILL.md) skill.

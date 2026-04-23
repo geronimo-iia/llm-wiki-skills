@@ -161,7 +161,9 @@ Otherwise create a regular page:
 wiki_content_new(uri: "<slug>", type: "<type>")
 ```
 
-Write the full content:
+The page is scaffolded with frontmatter and a body template based on
+the type (from `schemas/<type>.md`). Overwrite the body with
+synthesized content:
 
 ```
 wiki_content_write(uri: "<slug>", content: "<full markdown>")
@@ -252,7 +254,8 @@ After all files are processed, report to the user:
 - Contradictions or confidence changes worth flagging
 - Suggested follow-ups (e.g. run **lint**, check **graph** edges)
 
-After ingest, use the **graph** skill to verify new pages are
+After ingest, use `wiki_suggest` to propose links for new pages,
+and the **graph** skill to verify new pages are
 connected as expected (edges, backlinks, section placement).
 
 ## Linking policy

@@ -102,6 +102,17 @@ Pages with a generic or missing type that appear to be source
 summaries should use a specific source type (`paper`, `article`,
 `documentation`, etc.).
 
+## Draft audit
+
+Use the `status` facet from `wiki_list` or `wiki_stats` to find how
+many pages are in draft status:
+
+```
+wiki_stats()
+```
+
+The `status` facet shows the distribution (e.g. `active: 40, draft: 3`).
+
 ## Report findings
 
 Present findings grouped by category:
@@ -135,6 +146,16 @@ After each fix, write and ingest:
 wiki_content_write(uri: "<slug>", content: "<fixed content>")
 wiki_ingest(path: "<path>")
 ```
+
+## Under-linked pages
+
+Use `wiki_suggest` to find pages that should be linked but aren't:
+
+```
+wiki_suggest(slug: "<slug>", limit: 10)
+```
+
+Pages with many high-score suggestions are likely under-linked.
 
 ## Linking policy
 

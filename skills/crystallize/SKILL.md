@@ -127,6 +127,12 @@ Check graph edges are connected as expected:
 wiki_graph(root: "<slug>", depth: 1)
 ```
 
+Suggest links for the new page:
+
+```
+wiki_suggest(slug: "<slug>")
+```
+
 ## Suggested body structure
 
 Adapt to the content — not every section is needed:

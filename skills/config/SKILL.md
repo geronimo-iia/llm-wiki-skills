@@ -140,3 +140,4 @@ These keys can only appear in `config.toml`. Setting them in
 | `logging.log_rotation` | `daily` | `daily`, `hourly`, `never` |
 | `logging.log_max_files` | `7` | Max rotated files; `0` = unlimited |
 | `logging.log_format` | `text` | `text` or `json` |
+| `watch.debounce_ms` | `500` | Filesystem watcher debounce interval in ms |
