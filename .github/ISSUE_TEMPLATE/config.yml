@@ -1,0 +1,15 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and discussion
+    url: https://github.com/geronimo-iia/llm-wiki-skills/discussions
+    about: >
+      For questions about skill usage or workflow design, please open
+      a Discussion rather than an Issue.
+  - name: Contributing guide
+    url: https://github.com/geronimo-iia/llm-wiki-skills/blob/main/CONTRIBUTING.md
+    about: How to add or edit skills.
+  - name: Engine issues
+    url: https://github.com/geronimo-iia/llm-wiki/issues
+    about: >
+      For bugs in the llm-wiki engine itself (tool behaviour, MCP
+      protocol, CLI), open an issue in the engine repo.

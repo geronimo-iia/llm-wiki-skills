@@ -4,7 +4,7 @@ description: >
   Find and activate skills stored in the wiki — search by capability,
   read instructions, and follow workflows.
 type: skill
-status: active
+status: draft
 last_updated: "2025-07-21"
 when_to_use: >
   Looking for a workflow the wiki might have a skill for, listing

@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project adheres to [Semantic Versioning](https://semver.org).
 
+## [0.3.0] — 2026-04-26
+
+### Fixed
+
+- `wiki_content_commit`: `slugs` is a comma-separated string, not an array;
+  removed non-existent `all` parameter — omit `slugs` to commit all changes
+- `wiki_list`: replaced non-existent `path` parameter in ingest skill with
+  `wiki_ingest(path:..., dry_run: true)` for inbox scanning
+
 ## [0.2.0] — 2025-07-21
 
 ### Added

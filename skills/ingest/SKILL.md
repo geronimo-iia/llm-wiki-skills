@@ -30,24 +30,25 @@ on successful ingest — the move is the record of completion.
 ### Step 0 — Discover the wiki root
 
 ```
-wiki_schema(action: "list")
+wiki_spaces_list()
 ```
 
-The response includes the wiki root path. All paths below (`inbox/`,
-`raw/`) are relative to this root.
+The response includes the wiki path for each registered space. All
+paths below (`inbox/`, `raw/`) are relative to the default wiki's
+path.
 
 ### Step 1 — Scan inbox/
 
 If the user provided a path, use it (must be inside `inbox/`):
 
 ```
-wiki_list(path: "<user-provided-path>")
+wiki_ingest(path: "<user-provided-path>", dry_run: true)
 ```
 
 Otherwise scan the entire queue:
 
 ```
-wiki_list(path: "inbox/")
+wiki_ingest(path: "inbox/", dry_run: true)
 ```
 
 If no files are found, report "No files to process." and stop.

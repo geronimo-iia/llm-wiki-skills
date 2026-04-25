@@ -5,7 +5,7 @@ description: >
   structure, review hub pages.
 type: skill
 status: active
-last_updated: "2025-07-18"
+last_updated: "2026-04-26"
 when_to_use: >
   At the start of a session, when switching wikis, or when
   orientation to a wiki's structure and content is needed.

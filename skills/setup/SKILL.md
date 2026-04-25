@@ -40,7 +40,7 @@ If not installed, pick one method
 | Quick install (Windows)     | `irm https://raw.githubusercontent.com/geronimo-iia/llm-wiki/main/install.ps1 \| iex`                        |
 | Homebrew                    | `brew tap geronimo-iia/tap && brew install llm-wiki`                                                         |
 | asdf                        | `asdf plugin add llm-wiki https://github.com/geronimo-iia/asdf-llm-wiki.git && asdf install llm-wiki latest` |
-| Cargo (from source)         | `cargo install llm-wiki`                                                                                     |
+| Cargo (crates.io)           | `cargo install llm-wiki`                                                                                     |
 | Cargo (pre-built)           | `cargo binstall llm-wiki`                                                                                    |
 
 ### 2. Create the first wiki

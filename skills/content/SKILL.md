@@ -268,8 +268,9 @@ Content operations do not commit to git automatically. Commit
 explicitly after writing:
 
 ```
-wiki_content_commit(slugs: ["<slug>"])
-wiki_content_commit(all: true)
+wiki_content_commit(slugs: "<slug>")
+wiki_content_commit(slugs: "<slug1>,<slug2>")
+wiki_content_commit()
 ```
 
 When committing by slug, the engine stages the right files:
