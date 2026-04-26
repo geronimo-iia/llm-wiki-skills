@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project adheres to [Semantic Versioning](https://semver.org).
 
+## [0.3.1] — 2026-04-26
+
+### Fixed
+
+- Updated `cargo install llm-wiki` → `cargo install llm-wiki-engine`
+  in setup skill and README (crate renamed on crates.io)
+
 ## [0.3.0] — 2026-04-26
 
 ### Fixed

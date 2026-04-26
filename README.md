@@ -13,7 +13,7 @@ The `llm-wiki` binary must be installed. The plugin starts the MCP
 server (`llm-wiki serve`); the skills call the engine's tools.
 
 ```bash
-cargo install llm-wiki
+cargo install llm-wiki-engine
 ```
 
 Or download a binary from
