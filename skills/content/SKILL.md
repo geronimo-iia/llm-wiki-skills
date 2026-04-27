@@ -128,6 +128,30 @@ Strip frontmatter with `no_frontmatter: true`.
 When a page has `superseded_by` set, the output includes a notice
 pointing to the replacement.
 
+### Backlinks
+
+Pass `backlinks: true` to discover which pages link to this one:
+
+```
+wiki_content_read(uri: "concepts/moe", backlinks: true)
+```
+
+Response is JSON:
+
+```json
+{
+  "content": "# Mixture of Experts\n...",
+  "backlinks": [
+    { "slug": "concepts/scaling-laws", "title": "Scaling Laws" },
+    { "slug": "papers/switch-transformer", "title": "Switch Transformer" }
+  ]
+}
+```
+
+`backlinks` is an array of `{ slug, title }` for every page whose body
+contains `[[concepts/moe]]`. Returns an empty array when nothing links
+to this page. No overhead when `backlinks` is omitted (default).
+
 ## Page history
 
 ```
