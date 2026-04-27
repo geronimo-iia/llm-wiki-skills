@@ -219,6 +219,34 @@ ingest for real:
 wiki_ingest(path: "<path-relative-to-wiki-root>")
 ```
 
+**Redaction (opt-in):** when ingesting external content that may contain
+secrets — web clips, session transcripts, raw notes — pass `redact: true`:
+
+```
+wiki_ingest(path: "<path>", redact: true)
+```
+
+The engine scans each file body for 6 built-in patterns (GitHub PAT,
+OpenAI key, Anthropic key, AWS access key, Bearer token, email) and
+replaces matches with `[REDACTED:pattern-name]` before commit. The
+report includes a `redacted` field with the slug and line numbers of
+each match. **Redaction is lossy** — original values are gone after
+the file is written to disk. Do not use it on pages you have already
+reviewed and committed.
+
+Per-wiki, you can disable specific patterns or add custom ones in
+`wiki.toml`:
+
+```toml
+[redact]
+disable = ["email"]   # keep emails in a people/contacts wiki
+
+[[redact.patterns]]
+name        = "employee-id"
+pattern     = "EMP-[0-9]{6}"
+replacement = "[REDACTED:employee-id]"
+```
+
 The engine validates frontmatter, updates the tantivy search index,
 and commits to git (if `ingest.auto_commit` is true). If validation
 fails, the file is rejected with a clear error showing which fields

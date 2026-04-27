@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Added
 
+- **Crystallize two-step extraction** — explicit analysis step added before writes; extraction plan format with `What/Type/Action/Confidence` per item; user confirmation required before any page is created or updated
+- **Confidence calibration table** — 7-row table mapping session knowledge types (decision, pattern, finding, hypothesis, open-question, speculation) to suggested `confidence` ranges; adjustment guidance; default 0.5 rule
+- **Post-ingest lint step** — `wiki_lint(rules: "broken-link,orphan")` added after ingest in crystallize; catches dead references and orphan pages introduced by new session pages
+- **Redaction in ingest skill** — `wiki_ingest(redact: true)` documented in step 2f; when to use it (external content, session transcripts, raw notes); built-in patterns listed; per-wiki `wiki.toml` disable/extend example; lossy-by-design warning
 - **`wiki_lint` in lint skill** — `wiki_lint()` is now the first step in every audit; manual orphan/broken-link detection replaced with `wiki_lint(rules: "orphan")` and `wiki_lint(rules: "broken-link")`; judgment-based checks (empty sections, draft audit, under-linked pages) retained
 - **Backlinks discovery** — `backlinks: true` on `wiki_content_read` documented in content skill; example JSON response with `backlinks` array shown
 - **Backlinks as research technique** — research skill documents backlinks as a way to trace what depends on or cites a page
