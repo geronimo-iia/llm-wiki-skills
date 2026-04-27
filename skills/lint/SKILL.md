@@ -97,6 +97,19 @@ when an edge target has the wrong type.
 These require reasoning and stay in the skill — they cannot be reduced
 to an index query.
 
+### Structural orientation
+
+For a full-wiki structural overview before gap analysis, use
+`format: "llms"` to get all pages grouped by type with summaries:
+
+```
+wiki_list(format: "llms")
+```
+
+This replaces paginated listing for broad enumeration — one call
+covers the full wiki, grouped and annotated, without needing multiple
+`page_size: 100` calls.
+
 ### Empty sections
 
 ```

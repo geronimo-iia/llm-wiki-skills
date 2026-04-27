@@ -7,7 +7,7 @@ description: >
   Source files move to raw/ on successful ingest.
 type: skill
 status: active
-last_updated: "2025-07-18"
+last_updated: "2026-04-27"
 disable-model-invocation: true
 argument-hint: "[file-or-folder-path]"
 when_to_use: >
@@ -16,7 +16,7 @@ when_to_use: >
 tags: [ingest, workflow, sources]
 owner: jguibert@gmail.com
 metadata:
-  version: "0.3.0"
+  version: "0.4.0"
 ---
 
 # Ingest
@@ -96,6 +96,17 @@ If the source type is ambiguous (e.g. a PDF that could be a paper
 or documentation), ask the user before proceeding.
 
 #### 2c. Find integration points
+
+For the **first file** in a session, orient with the full wiki map:
+
+```
+wiki_list(format: "llms")
+```
+
+This produces all pages grouped by type with summaries in a single
+call — use it to understand what already exists before searching for
+specific candidates. Subsequent files in the same session can skip
+this call since the map is already in context.
 
 Search for existing pages on the same topic:
 

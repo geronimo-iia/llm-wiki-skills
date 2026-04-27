@@ -6,14 +6,14 @@ description: >
   exploration, and gap identification.
 type: skill
 status: active
-last_updated: "2025-07-21"
+last_updated: "2026-04-27"
 when_to_use: >
   Answering a question from wiki knowledge, exploring what the wiki
   knows about a topic, or identifying knowledge gaps.
 tags: [research, search, synthesis]
 owner: jguibert@gmail.com
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # Research
@@ -21,6 +21,23 @@ metadata:
 Search the wiki, read relevant pages, and synthesize an answer from
 existing knowledge. The wiki is the persistent knowledge base — use it
 before generating from scratch.
+
+## Orient
+
+For broad questions ("what does the wiki know about X?") or coverage
+assessment, start with the full wiki map:
+
+```
+wiki_list(format: "llms")
+```
+
+This returns all pages grouped by type with summaries — one call
+instead of multiple searches. Use it when:
+- The question is wide ("what does the wiki cover on LLMs?")
+- You need to assess coverage before deciding whether to ingest new sources
+- You want to understand the wiki's knowledge shape before drilling in
+
+For narrow, specific queries, skip this step and go straight to search.
 
 ## Search
 
