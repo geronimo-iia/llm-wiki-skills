@@ -47,7 +47,15 @@ the input. Crystallize distils — it does not transcribe.
 
 ## Search for an existing home
 
-Before creating anything new, search the wiki:
+Before creating anything new, orient with the full wiki map:
+
+```
+wiki_list(format: "llms")
+```
+
+This produces all pages grouped by type with summaries — a complete
+map in a single call. Use it to identify existing pages that may
+cover the same ground, then search for candidates:
 
 ```
 wiki_search(query: "<topic>")

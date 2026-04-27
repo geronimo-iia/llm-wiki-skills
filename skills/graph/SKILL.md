@@ -5,7 +5,7 @@ description: >
   labeled edges, relation filtering, and subgraph extraction.
 type: skill
 status: active
-last_updated: "2025-07-21"
+last_updated: "2026-04-27"
 disable-model-invocation: true
 argument-hint: "[--type concept] [--root slug] [--depth N] [--relation fed-by]"
 when_to_use: >
@@ -15,7 +15,7 @@ when_to_use: >
 tags: [graph, visualization, structure, edges]
 owner: jguibert@gmail.com
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # Graph
@@ -59,15 +59,21 @@ the wrong type.
 wiki_graph()
 ```
 
-Output format is `mermaid` (default) or `dot`:
+Output format is `mermaid` (default), `dot`, or `llms`:
 
 ```
 wiki_graph(format: "mermaid")
 wiki_graph(format: "dot")
+wiki_graph(format: "llms")
 ```
 
 Mermaid output can be rendered directly in Markdown code blocks.
 Relation labels appear on edges. Node types map to CSS classes.
+
+`format: "llms"` produces a natural language description of the graph
+structure: node counts by type, top hubs by degree, edge relation
+counts, and isolated nodes — directly readable without a renderer.
+Use it when the goal is interpretation, not visualization.
 
 ## Filter the graph
 
@@ -95,6 +101,23 @@ wiki_graph(type: "concept", relation: "depends-on", root: "concepts/moe", depth:
 | set | N | Subgraph from root, N hops |
 
 ## Interpret the graph
+
+For structural interpretation, use `format: "llms"` to get a natural
+language summary of the graph without requiring you to parse Mermaid:
+
+```
+wiki_graph(format: "llms")
+```
+
+The output surfaces clusters (nodes grouped by type), key hubs (by
+degree), edge relation counts, and isolated nodes directly. Use it
+when the goal is analysis rather than visualization.
+
+For a renderable diagram (Mermaid, DOT), use the default format:
+
+```
+wiki_graph()
+```
 
 Analyze the graph structure for:
 
