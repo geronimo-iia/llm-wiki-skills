@@ -21,10 +21,43 @@ metadata:
 Two configuration files control llm-wiki behavior:
 
 - `~/.llm-wiki/config.toml` — global engine config (local to the
-  machine, never committed)
+  machine, never committed). Override the path with `--config <path>`
+  or the `LLM_WIKI_CONFIG` environment variable.
 - `<wiki>/wiki.toml` — per-wiki config (committed to git, shared)
 
-## Resolution order
+## Config file location
+
+```
+1. --config <path> CLI flag        (highest)
+2. LLM_WIKI_CONFIG env var
+3. ~/.llm-wiki/config.toml         (default)
+```
+
+The `--config` flag is global — it works on every subcommand including
+`serve`. Use it in `.mcp.json` to run isolated environments:
+
+```json
+{
+  "llm-wiki": {
+    "command": "llm-wiki",
+    "args": ["--config", "/path/to/config.toml", "serve"]
+  }
+}
+```
+
+Or via `env`:
+
+```json
+{
+  "llm-wiki": {
+    "command": "llm-wiki",
+    "args": ["serve"],
+    "env": { "LLM_WIKI_CONFIG": "/path/to/config.toml" }
+  }
+}
+```
+
+## Resolution order (settings within the config)
 
 ```
 1. CLI flag / MCP parameter
