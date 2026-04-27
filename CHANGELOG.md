@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - **`format: "llms"` orientation pattern** — `wiki_list(format: "llms")` added as first step in crystallize (before searches), first-file orientation in ingest step 2c, and optional broad-query orientation in research; replaces multi-call paginated listing for full-wiki orientation
 - **Lint structural orientation** — `wiki_list(format: "llms")` documented in lint skill for structural gap analysis before judgment-based checks
 - **Graph `format: "llms"`** — graph skill documents `wiki_graph(format: "llms")` as the primary interpretation call; produces natural language description (clusters, hubs, isolated nodes, relation counts) without requiring Mermaid parsing; Mermaid/DOT retained for visualization
+- **Lint fix guidance completed** — fix instructions added for all 5 engine rules (`stale`, `unknown-type`, `missing-fields` were previously missing); `wiki_lint(wiki: "name")` parameter documented
 
 ### Changed
 
