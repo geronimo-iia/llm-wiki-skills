@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [0.4.0] — Unreleased
 
+### Added
+
+- **Backlinks discovery** — `backlinks: true` on `wiki_content_read` documented in content skill; example JSON response with `backlinks` array shown
+- **Backlinks as research technique** — research skill documents backlinks as a way to trace what depends on or cites a page
+
 ### Changed
 
 - **`claims[].confidence` aligned to float** — was string enum `high/medium/low`; now `0.0–1.0` matching page-level confidence in frontmatter, ingest, and research skills
