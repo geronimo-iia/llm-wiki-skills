@@ -156,6 +156,10 @@ Flag explicit contradictions — do not infer or speculate. Report:
 - The slug of the page to update
 - Whether the source or the wiki appears more authoritative
 
+Pages with unresolved contradictions should be created or left with
+`status: draft` so the **review** skill picks them up in the next review
+session.
+
 **Produce an ingest plan:**
 
 Example:

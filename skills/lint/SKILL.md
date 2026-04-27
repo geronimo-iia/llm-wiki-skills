@@ -180,3 +180,9 @@ After each fix:
 wiki_content_write(uri: "<slug>", content: "<fixed content>")
 wiki_ingest(path: "<path>")
 ```
+
+## Running lint before a review session
+
+`wiki_lint` findings feed directly into the **review** skill's priority queue.
+Run lint immediately before a review session to ensure the queue reflects the
+current state of the index.
