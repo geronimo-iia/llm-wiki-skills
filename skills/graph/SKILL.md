@@ -15,7 +15,7 @@ when_to_use: >
 tags: [graph, visualization, structure, edges]
 owner: jguibert@gmail.com
 metadata:
-  version: "0.4.0"
+  version: "0.5.0"
 ---
 
 # Graph
@@ -138,6 +138,23 @@ Analyze the graph structure for:
 - **Key hubs** — pages with high degree (important concepts)
 - **Bridge nodes** — pages connecting otherwise separate clusters
 - **Missing edges** — concepts that should be linked but aren't
+
+## Community insights
+
+When the wiki has ≥ 30 pages, call `wiki_stats()` and read the `communities` field:
+
+- `isolated` — slugs in size-≤-2 communities; run `wiki_suggest` on each to find
+  connection candidates
+- `count` — how many clusters exist; high count with low `largest` means a fragmented wiki
+- `largest` / `smallest` — size range; a dominant cluster with many isolated pages
+  means there are unconnected drafts
+
+`wiki_suggest` results with `reason: "same knowledge cluster"` are cross-cluster
+candidates — thematically related pages with no direct link path. These are the
+highest-value link suggestions.
+
+When `communities` is `null` (wiki below 30 pages), identify clusters manually
+from the Mermaid or DOT output.
 
 ## Suggest improvements
 
