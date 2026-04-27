@@ -16,7 +16,7 @@ when_to_use: >
 tags: [ingest, workflow, sources]
 owner: jguibert@gmail.com
 metadata:
-  version: "0.4.0"
+  version: "0.5.0"
 ---
 
 # Ingest
@@ -69,7 +69,7 @@ Natively readable: `.md`, `.txt`, `.csv`, `.json`, `.yaml`, `.html`,
 `.xml`, and most text-based files.
 
 If reading fails (binary, unsupported format): note the reason and
-skip to step 2g. The file stays in inbox/ for manual handling.
+skip to step 2h. The file stays in inbox/ for manual handling.
 
 #### 2b. Classify the source
 
@@ -137,7 +137,42 @@ This serves two purposes:
 If multiple candidate pages could be the integration target, ask
 the user which one to update.
 
-#### 2d. Decide: create or update
+#### 2d. Analyse the source
+
+Before writing anything, produce an analysis of the source:
+
+**Enumerate durable knowledge items:**
+For each concept, claim, finding, or entity in the source, note:
+- **What** — one sentence
+- **Type** — `concept`, `paper`, `article`, `documentation`, etc.
+- **Novelty** — `new` (not in wiki), `extends` (adds to existing page),
+  `contradicts` (conflicts with existing page), `duplicate` (already covered)
+- **Confidence** — estimated score (see calibration table in the **frontmatter** skill)
+
+**Detect contradictions:**
+For each page found in step 2c, compare its claims against the source.
+Flag explicit contradictions — do not infer or speculate. Report:
+- Which source claim contradicts which wiki page
+- The slug of the page to update
+- Whether the source or the wiki appears more authoritative
+
+**Produce an ingest plan:**
+
+Example:
+```
+Source: "Mixtral of Experts" (paper, 2024)
+
+1. Mixture of Experts — concept — extends concepts/mixture-of-experts [0.9]
+2. Mixtral architecture — concept — new: concepts/mixtral-architecture [0.85]
+3. Sparse MoE routing efficiency — claim — extends concepts/sparse-routing [0.8]
+4. Contradicts: concepts/moe-compute-cost claims O(n); source claims O(k/n) — update needed
+5. Switch Transformer comparison — extends sources/switch-transformer-2021 [0.75]
+```
+
+Present the plan to the user and confirm before writing. If the user redirects
+(e.g. "skip item 2", "merge 1 and 2"), update the plan before proceeding.
+
+#### 2e. Decide: create or update
 
 - If a concept page already covers this topic → update it with new
   claims and sources
@@ -148,7 +183,13 @@ the user which one to update.
 - One source can produce multiple pages — a rich document may warrant
   a source page plus new concept pages
 
-#### 2e. Write pages
+#### 2f. Write pages
+
+Work through the ingest plan items in order:
+- Each `new` item → `wiki_content_new` + `wiki_content_write`
+- Each `extends` item → read existing page first (`wiki_content_read`), then update
+- Each `contradicts` item → see contradiction handling below
+- Each `duplicate` item → skip; note in step 2h outcome
 
 Get the frontmatter scaffold for the target type:
 
@@ -208,7 +249,15 @@ wiki_schema(action: "show", type: "<type>")
    there is a clear reason
 5. Write the complete file
 
-#### 2f. Validate and index
+**Contradiction handling:** when a source contradicts an existing page:
+1. Read the existing page with `wiki_content_read`
+2. Add a new entry to `claims[]` with the source's version and a reference to the source page
+3. Lower the page-level `confidence` if the contradiction is unresolved
+4. Add an open question in the body flagging the discrepancy for human review
+
+Do not silently overwrite the existing claim — preserve both versions.
+
+#### 2g. Validate and index
 
 Pre-check the schema:
 
@@ -276,12 +325,13 @@ was successfully ingested.
 If validation passes but you want deeper checks (broken wikilinks,
 orphan pages, style issues), follow the **lint** skill.
 
-#### 2g. Record outcome
+#### 2h. Record outcome
 
 Track the result for this file:
 - Pages created (slugs and types)
 - Pages updated (what changed)
 - Skipped (reason: unreadable, failed validation, etc.)
+- Contradictions flagged (slug + which claims conflict)
 
 Then proceed to the next file in inbox/.
 
@@ -293,7 +343,7 @@ After all files are processed, report to the user:
 - Pages created (with slugs and types)
 - Pages updated (what changed)
 - Files skipped with reasons
-- Contradictions or confidence changes worth flagging
+- Contradictions flagged (slug, conflicting claims, resolution status)
 - Suggested follow-ups (e.g. run **lint**, check **graph** edges)
 
 After ingest, use `wiki_suggest` to propose links for new pages,
@@ -328,4 +378,4 @@ ones.
 6. **Skip, do not block** — if a file is unreadable or fails
    validation, record the reason and continue with the next file
 7. **Preserve on update** — never drop existing list values; read
-   before write (accumulation contract in step 2e)
+   before write (accumulation contract in step 2f)
