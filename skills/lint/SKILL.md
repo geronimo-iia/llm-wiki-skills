@@ -6,7 +6,7 @@ description: >
 type: skill
 status: active
 last_updated: "2026-04-27"
-disable-model-invocation: true
+disable-model-invocation: false
 when_to_use: >
   Auditing wiki structure, checking for broken links or orphan pages,
   validating schemas, or verifying graph integrity after content

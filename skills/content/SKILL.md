@@ -7,7 +7,7 @@ description: >
 type: skill
 status: active
 last_updated: "2025-07-21"
-disable-model-invocation: true
+disable-model-invocation: false
 argument-hint: "[slug] [--type concept|doc|section|skill|paper|...]"
 when_to_use: >
   Reading a page, creating a page or section, updating existing
