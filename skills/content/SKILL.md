@@ -6,7 +6,7 @@ description: >
   workflows.
 type: skill
 status: active
-last_updated: "2025-07-21"
+last_updated: "2026-04-27"
 disable-model-invocation: false
 argument-hint: "[slug] [--type concept|doc|section|skill|paper|...]"
 when_to_use: >
@@ -15,7 +15,7 @@ when_to_use: >
 tags: [content, write, create, read, update, section, authoring]
 owner: jguibert@gmail.com
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # Content
@@ -113,6 +113,17 @@ See [[concepts/scaling-laws]] for background.
 
 Wiki links create graph edges (generic `links-to` relation).
 Deduplicated per page — each slug appears once in the link list.
+
+**Cross-wiki links** use `wiki://` URI syntax:
+```yaml
+sources:
+  - concepts/local-concept       # same wiki
+  - wiki://other/concepts/foo    # page in the "other" wiki
+```
+Body text: `[[wiki://other/concepts/foo]]`
+
+Cross-wiki targets appear as external nodes in `wiki_graph`; set `cross_wiki: true`
+to resolve them fully when both wikis are mounted.
 
 ## Read a page
 
