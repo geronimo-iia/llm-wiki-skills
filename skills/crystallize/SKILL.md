@@ -5,7 +5,7 @@ description: >
   findings, and open questions into concept or query-result pages.
 type: skill
 status: active
-last_updated: "2025-07-21"
+last_updated: "2026-04-27"
 when_to_use: >
   Preserving session knowledge — decisions reached, patterns
   discovered, questions resolved, or design rationale established.
@@ -14,7 +14,7 @@ when_to_use: >
 tags: [crystallize, session, knowledge-capture]
 owner: jguibert@gmail.com
 metadata:
-  version: "0.2.0"
+  version: "0.3.0"
 ---
 
 # Crystallize
@@ -61,6 +61,49 @@ Read candidates to check scope:
 ```
 wiki_content_read(uri: "<candidate-slug>")
 ```
+
+## Analyse before writing
+
+Before creating or updating any page, produce a concise extraction plan.
+
+For each item of durable knowledge in the session, note:
+- **What** — one sentence describing the knowledge
+- **Type** — `decision`, `finding`, `pattern`, `open-question`
+- **Action** — `create <type> <slug>`, `update <slug>`, or `discard`
+- **Confidence** — estimated score (see calibration table below)
+
+Example plan output:
+
+```
+1. tantivy fast fields require f64 not f32 (finding) → create concept tantivy-fast-field-types [0.85]
+2. tweak_score replaces post-retrieval sort (decision) → create query-result search-ranking-tweak-score [0.9]
+3. design-03 needs to depend on design-04 (decision) → update query-result improvements-ordering [0.8]
+4. explored renaming ops module (dead end) → discard
+```
+
+Present the plan to the user and confirm before writing. This keeps the
+user in control and prevents the session from producing redundant or
+misclassified pages.
+
+## Confidence calibration for session knowledge
+
+| Knowledge type | Suggested `confidence` |
+|---|---|
+| Decision explicitly reached, agreed by all parties | 0.85–0.95 |
+| Pattern observed, confirmed by evidence in session | 0.70–0.85 |
+| Finding confirmed and cross-referenced with existing pages | 0.80–0.95 |
+| Pattern observed, not yet tested broadly | 0.50–0.65 |
+| Hypothesis raised, plausible but unvalidated | 0.30–0.50 |
+| Open question noted, no resolution | 0.20–0.35 |
+| Speculation or brainstorm output | 0.10–0.25 |
+
+These ranges are starting points. Adjust up when the session provided
+strong evidence (code confirmed to work, multiple independent sources);
+adjust down when the conclusion was tentative or context-specific.
+
+The default when no calibration applies is `0.5` (neutral — present but
+unreviewed). Never leave `confidence` absent on session-derived pages:
+the lint rule will flag them as stale if they stay at default for long.
 
 ## Create a new page
 
@@ -112,6 +155,26 @@ Then ingest for real:
 ```
 wiki_ingest(path: "<path>")
 ```
+
+### Check structural quality
+
+After ingest, run the engine lint for the pages just written:
+
+```
+wiki_lint(rules: "broken-link,orphan")
+```
+
+This catches:
+- Dead references in `sources`, `concepts`, or body wikilinks introduced
+  by the new pages
+- Orphan pages if the new page was not linked from anywhere
+
+Fix any `Error` findings before closing the session. `Warning` findings
+(orphan on a newly created standalone page) can be deferred.
+
+> **Note:** `wiki_lint` ships with engine v0.2.0. If the command is not
+> recognized, skip this step and follow the **lint** skill manually for
+> broken-link and orphan checks.
 
 ## Verify
 
