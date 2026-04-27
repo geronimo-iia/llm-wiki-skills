@@ -173,7 +173,9 @@ wiki_content_write(uri: "<slug>", content: "<full markdown>")
 For each page:
 - Set the correct `type`
 - Write all required fields for that type (the template shows them)
-- Add `sources`, `concepts`, `tags`, `confidence`, `claims` as relevant
+- Add `sources`, `concepts`, `tags`, `confidence`, `claims` as relevant;
+  set `confidence` to `0.5` on new pages (single source, unreviewed) and
+  raise it only as corroborating evidence accumulates
 - Write a structured body — synthesize, do not copy verbatim
 - Add links to related pages found in step 2c
 

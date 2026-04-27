@@ -117,13 +117,16 @@ there?
 
 ### confidence
 
+A float `0.0–1.0` on both page and claim objects. Same scale everywhere.
+
 | Value | When to use |
 |-------|-------------|
-| `high` | Multiple corroborating sources, well-established |
-| `medium` | Single source, or sources with caveats |
-| `low` | Preliminary, speculative, or contradicted |
+| `0.9` | Multiple corroborating sources, well-established |
+| `0.5` | Single source, or source has caveats |
+| `0.2` | Preliminary, speculative, or contradicted |
 
-Default to `medium`.
+Default to `0.5` when unsure. Omit on claim objects when no certainty
+signal was recorded (absence is distinct from `0.5` neutral).
 
 ### claims
 
@@ -132,7 +135,7 @@ Structured claims extracted from sources:
 ```yaml
 claims:
   - text: "Sparse MoE reduces effective compute 8x"
-    confidence: high
+    confidence: 0.9
     source: sources/switch-transformer-2021
     section: "Results"
 ```
@@ -196,5 +199,5 @@ When updating a page:
 | Missing `read_when` | Always include 2–5 retrieval conditions |
 | Listing every related source | Only sources that contributed claims |
 | Dropping existing tags on update | Read first, preserve existing values |
-| Setting `confidence: high` without evidence | Default to `medium` |
+| Setting `confidence: 0.9` without evidence | Default to `0.5` |
 | Classifying by topic instead of source nature | Blog about research → `article` |

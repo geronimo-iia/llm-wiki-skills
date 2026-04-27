@@ -101,7 +101,10 @@ Compose an answer from the wiki's knowledge:
 - Cite sources with `wiki://` URIs (e.g. `wiki://concepts/moe`)
 - Distinguish between what concept pages say (synthesized knowledge)
   and what source pages claim (provenance)
-- Note confidence levels where available
+- Note confidence levels where available — the `confidence` float (0.0–1.0)
+  is returned directly in search results; a value below `0.5` signals the
+  page is provisional or lightly corroborated and its claims should be
+  treated accordingly
 
 ## Identify gaps
 
