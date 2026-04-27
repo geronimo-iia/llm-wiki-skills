@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project adheres to [Semantic Versioning](https://semver.org).
 
+## [0.4.0] — Unreleased
+
+### Changed
+
+- **`claims[].confidence` aligned to float** — was string enum `high/medium/low`; now `0.0–1.0` matching page-level confidence in frontmatter, ingest, and research skills
+- **Confidence guidance updated** — frontmatter skill rewrites the `### confidence` section with float scale table and conventional values (`0.9` well-corroborated, `0.5` single source, `0.2` speculative); anti-pattern row updated from `confidence: high` → `confidence: 0.9`
+- **Ingest skill** — confidence guidance for new pages notes `0.5` as the scaffold default
+- **Research skill** — confidence interpretation updated for float values in search results
+
 ## [0.3.1] — 2026-04-26
 
 ### Fixed
