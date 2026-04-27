@@ -6,7 +6,7 @@ description: >
 type: skill
 status: active
 last_updated: "2026-04-27"
-disable-model-invocation: true
+disable-model-invocation: false
 argument-hint: "[--type concept] [--root slug] [--depth N] [--relation fed-by]"
 when_to_use: >
   Visualizing wiki structure, exploring relationships between pages,
