@@ -5,7 +5,7 @@ description: >
   edge target type mismatches, and schema integrity.
 type: skill
 status: active
-last_updated: "2025-07-21"
+last_updated: "2026-04-27"
 disable-model-invocation: true
 when_to_use: >
   Auditing wiki structure, checking for broken links or orphan pages,
@@ -14,13 +14,47 @@ when_to_use: >
 tags: [lint, audit, quality, structure]
 owner: jguibert@gmail.com
 metadata:
-  version: "0.2.0"
+  version: "0.4.0"
 ---
 
 # Lint
 
 Structural audit of the wiki. Find quality issues, report them, and
 offer fixes.
+
+## Deterministic checks (engine)
+
+Start every audit by running the engine lint tool. These checks are
+index-based, deterministic, and fast:
+
+```
+wiki_lint()
+```
+
+This returns a JSON report with `findings` grouped by rule:
+
+| Rule | Severity | What it checks |
+|------|----------|----------------|
+| `orphan` | warning | Pages with no incoming links (excluding sections) |
+| `broken-link` | error | Slugs in `body_links` or frontmatter edge fields that don't exist |
+| `missing-fields` | error | Required frontmatter fields absent per type schema |
+| `stale` | warning | Old `last_updated` AND low `confidence` (both must hold) |
+| `unknown-type` | error | `type` field not registered in the type registry |
+
+Run a subset of rules:
+
+```
+wiki_lint(rules: "orphan,broken-link")
+```
+
+Filter to errors only (CI-suitable):
+
+```
+wiki_lint(severity: "error")
+```
+
+An empty `findings` array means the wiki is clean for these rules.
+`error` findings block CI (`llm-wiki lint --severity error` exits non-zero).
 
 ## Schema integrity
 
@@ -32,7 +66,7 @@ wiki_schema(action: "validate")
 
 Checks: valid JSON Schema, `x-wiki-types` presence, alias resolution,
 base schema invariant (`default` type requires `title` and `type`),
-and full index compatibility (no field conflicts across schemas).
+and full index compatibility.
 
 Validate a single type:
 
@@ -50,40 +84,14 @@ wiki_ingest(path: "<path>", dry_run: true)
 ```
 
 The engine reads `x-graph-edges` from the type's schema and warns
-when an edge target has the wrong type. For example:
+when an edge target has the wrong type.
 
-- A concept with `sources` pointing to another concept instead of a
-  source type (`fed-by` expects source types)
-- A source page with `concepts` pointing to a paper instead of a
-  concept (`informs` expects `concept`)
+## Judgment-based checks (skill layer)
 
-## Orphan detection
+These require reasoning and stay in the skill — they cannot be reduced
+to an index query.
 
-Pages with no inbound links from `sources`, `concepts`, or body
-`[[wikilinks]]` are orphans.
-
-Generate the graph and look for isolated nodes:
-
-```
-wiki_graph()
-```
-
-## Broken links
-
-Frontmatter fields (`sources`, `concepts`, `document_refs`,
-`superseded_by`) and body `[[wikilinks]]` may reference slugs that
-don't exist in the index.
-
-Read each page and check referenced slugs against the page list:
-
-```
-wiki_list(page_size: 100)
-wiki_content_read(uri: "<slug>")
-```
-
-## Empty sections
-
-Sections with no child pages underneath:
+### Empty sections
 
 ```
 wiki_list(type: "section", page_size: 50)
@@ -91,36 +99,44 @@ wiki_list(type: "section", page_size: 50)
 
 For each section, check if any pages exist under that slug prefix.
 
-## Missing stubs
+### Missing stubs
 
-Referenced slugs that don't exist. These are candidates for new pages
-— create stubs with minimal frontmatter or remove the dead reference.
+Referenced slugs that don't exist and have not been caught by
+`broken-link` (e.g. intentional forward references). These are
+candidates for new pages — create stubs or remove the dead reference.
 
-## Untyped sources
+### Untyped sources
 
 Pages with a generic or missing type that appear to be source
 summaries should use a specific source type (`paper`, `article`,
-`documentation`, etc.).
+`documentation`, etc.). Requires judgment: is this page *acting* as
+a source?
 
-## Draft audit
-
-Use the `status` facet from `wiki_list` or `wiki_stats` to find how
-many pages are in draft status:
+### Draft audit
 
 ```
 wiki_stats()
 ```
 
 The `status` facet shows the distribution (e.g. `active: 40, draft: 3`).
+Review draft pages: are they progressing, abandoned, or placeholders?
+
+### Under-linked pages
+
+```
+wiki_suggest(slug: "<slug>", limit: 10)
+```
+
+Pages with many high-score suggestions are likely under-linked.
+Requires relevance judgment — don't link for graph density.
 
 ## Report findings
 
-Present findings grouped by category:
+Present findings grouped by category, leading with `wiki_lint` output:
 
+- **Engine findings** — orphans, broken links, missing fields, stale, unknown types
 - **Schema issues** — invalid schemas, field conflicts
 - **Edge type mismatches** — wrong target types on graph edges
-- **Orphan pages** — no inbound links
-- **Broken links** — references to non-existent slugs
 - **Empty sections** — sections with no children
 - **Missing stubs** — referenced pages that don't exist
 - **Untyped sources** — source pages without specific types
@@ -129,36 +145,16 @@ Present findings grouped by category:
 
 For each category:
 
-- **Schema issues** — fix the schema file, then
-  `wiki_schema(action: "validate")`
-- **Edge type mismatches** — fix the frontmatter field, then
-  `wiki_ingest(path: "<path>")`
-- **Missing stubs** — create stub pages with
-  `wiki_content_new(uri: "<slug>", type: "<type>")`
-- **Broken links** — remove dead references or create the missing
-  pages
+- **Broken links** — remove dead references or create the missing pages
 - **Orphan pages** — add links from related pages
+- **Schema issues** — fix the schema file, then `wiki_schema(action: "validate")`
+- **Edge type mismatches** — fix the frontmatter field, then `wiki_ingest`
+- **Missing stubs** — `wiki_content_new(uri: "<slug>", type: "<type>")`
 - **Empty sections** — create or move pages under the section
 
-After each fix, write and ingest:
+After each fix:
 
 ```
 wiki_content_write(uri: "<slug>", content: "<fixed content>")
 wiki_ingest(path: "<path>")
 ```
-
-## Under-linked pages
-
-Use `wiki_suggest` to find pages that should be linked but aren't:
-
-```
-wiki_suggest(slug: "<slug>", limit: 10)
-```
-
-Pages with many high-score suggestions are likely under-linked.
-
-## Linking policy
-
-When suggesting new links, apply the backlink quality test: would a
-reader of page A genuinely benefit from knowing about page B? Do not
-link for graph density — link for navigation quality.

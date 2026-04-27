@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Added
 
+- **`wiki_lint` in lint skill** — `wiki_lint()` is now the first step in every audit; manual orphan/broken-link detection replaced with `wiki_lint(rules: "orphan")` and `wiki_lint(rules: "broken-link")`; judgment-based checks (empty sections, draft audit, under-linked pages) retained
 - **Backlinks discovery** — `backlinks: true` on `wiki_content_read` documented in content skill; example JSON response with `backlinks` array shown
 - **Backlinks as research technique** — research skill documents backlinks as a way to trace what depends on or cites a page
 
