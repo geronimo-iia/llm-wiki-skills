@@ -15,7 +15,7 @@ when_to_use: >
 tags: [graph, visualization, structure, edges]
 owner: jguibert@gmail.com
 metadata:
-  version: "0.3.0"
+  version: "0.4.0"
 ---
 
 # Graph
@@ -99,6 +99,18 @@ wiki_graph(type: "concept", relation: "depends-on", root: "concepts/moe", depth:
 | not set | N | Full graph, edges within N hops of any node |
 | set | not set | Subgraph from root, default depth from config |
 | set | N | Subgraph from root, N hops |
+
+**Unified cross-wiki graph:**
+```
+wiki_graph(cross_wiki: true)
+```
+Merges all mounted wikis into a single graph. Each node is prefixed with its
+wiki name for disambiguation. Cross-wiki edges appear as resolved connections.
+
+**Single-wiki with cross-wiki targets:**
+Without `cross_wiki: true`, pages linking to other wikis produce external
+placeholder nodes — visually distinct (dashed border in Mermaid/DOT) — showing
+that the link exists but the target lives in another space.
 
 ## Interpret the graph
 

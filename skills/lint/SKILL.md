@@ -14,7 +14,7 @@ when_to_use: >
 tags: [lint, audit, quality, structure]
 owner: jguibert@gmail.com
 metadata:
-  version: "0.4.0"
+  version: "0.5.0"
 ---
 
 # Lint
@@ -37,6 +37,7 @@ This returns a JSON report with `findings` grouped by rule:
 |------|----------|----------------|
 | `orphan` | warning | Pages with no incoming links (excluding sections) |
 | `broken-link` | error | Slugs in `body_links` or frontmatter edge fields that don't exist |
+| `broken-cross-wiki-link` | warning | `wiki://` URI pointing to a wiki not currently mounted |
 | `missing-fields` | error | Required frontmatter fields absent per type schema |
 | `stale` | warning | Old `last_updated` AND low `confidence` (both must hold) |
 | `unknown-type` | error | `type` field not registered in the type registry |
@@ -165,6 +166,7 @@ Present findings grouped by category, leading with `wiki_lint` output:
 For each category:
 
 - **Broken links** — remove dead references or create the missing pages
+- **Broken cross-wiki links** — run `wiki_spaces_list()` to confirm the wiki name; if the target wiki is intentionally not mounted (referencing a planned future space), the Warning can be acknowledged and ignored; otherwise fix the wiki name or mount the space
 - **Orphan pages** — add a `[[slug]]` reference from a related page, or link from a section or index page
 - **Missing fields** — open the page and add the required frontmatter field for its type; use `wiki_schema(action: "show", type: "<type>")` to see what is required
 - **Stale pages** — review and update content, set `last_updated` to today, and raise `confidence` to reflect current certainty; a page with `confidence: 0.9` is not stale even if old
