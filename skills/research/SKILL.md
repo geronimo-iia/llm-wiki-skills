@@ -71,6 +71,21 @@ knowledge is current:
 wiki_history(slug: "<slug>", limit: 1)
 ```
 
+## Discover incoming links (backlinks)
+
+To find what references a page — useful when tracing impact or finding
+dependent concepts — use `backlinks: true`:
+
+```
+wiki_content_read(uri: "<slug>", backlinks: true)
+```
+
+The response includes a `backlinks` array of `{ slug, title }` for every
+page that links to this one. Use this when:
+- You need to understand what depends on or cites a concept
+- You want to find pages to update when a concept changes
+- You are tracing propagation of an idea through the wiki
+
 ## Explore relationships
 
 Use the graph to explore how pages connect:
