@@ -53,6 +53,12 @@ Filter to errors only (CI-suitable):
 wiki_lint(severity: "error")
 ```
 
+Target a specific wiki:
+
+```
+wiki_lint(wiki: "research")
+```
+
 An empty `findings` array means the wiki is clean for these rules.
 `error` findings block CI (`llm-wiki lint --severity error` exits non-zero).
 
@@ -146,7 +152,10 @@ Present findings grouped by category, leading with `wiki_lint` output:
 For each category:
 
 - **Broken links** — remove dead references or create the missing pages
-- **Orphan pages** — add links from related pages
+- **Orphan pages** — add a `[[slug]]` reference from a related page, or link from a section or index page
+- **Missing fields** — open the page and add the required frontmatter field for its type; use `wiki_schema(action: "show", type: "<type>")` to see what is required
+- **Stale pages** — review and update content, set `last_updated` to today, and raise `confidence` to reflect current certainty; a page with `confidence: 0.9` is not stale even if old
+- **Unknown type** — correct the typo in the `type:` field, or register the new type with `wiki_schema(action: "add")`; run `wiki_schema(action: "list")` to see registered types
 - **Schema issues** — fix the schema file, then `wiki_schema(action: "validate")`
 - **Edge type mismatches** — fix the frontmatter field, then `wiki_ingest`
 - **Missing stubs** — `wiki_content_new(uri: "<slug>", type: "<type>")`
