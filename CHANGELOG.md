@@ -27,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Changed
 
+- **`configure-hugo` skill rewritten** — now uses `wiki_spaces_list` to get repo root path; reads/writes `site/hugo.toml` directly on disk; commits scaffold via git (not `wiki_content_commit` — files live outside `wiki/`); updated for `llm-wiki-hugo-cms` v0.1.0 layout (`site/` subfolder, `templates/.github/`)
+
 - **`claims[].confidence` aligned to float** — was string enum `high/medium/low`; now `0.0–1.0` matching page-level confidence in frontmatter, ingest, and research skills
 - **Confidence guidance updated** — frontmatter skill rewrites the `### confidence` section with float scale table and conventional values (`0.9` well-corroborated, `0.5` single source, `0.2` speculative); anti-pattern row updated from `confidence: high` → `confidence: 0.9`
 - **Ingest skill** — confidence guidance for new pages notes `0.5` as the scaffold default
