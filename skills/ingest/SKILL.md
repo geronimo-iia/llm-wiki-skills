@@ -190,7 +190,7 @@ Present the plan to the user and confirm before writing. If the user redirects
 #### 2f. Write pages
 
 Work through the ingest plan items in order:
-- Each `new` item → `wiki_content_new` + `wiki_content_write`
+- Each `new` item → `wiki_content_new` + direct file write (see below)
 - Each `extends` item → read existing page first (`wiki_content_read`), then update
 - Each `contradicts` item → see contradiction handling below
 - Each `duplicate` item → skip; note in step 2h outcome
@@ -203,27 +203,28 @@ wiki_schema(action: "show", type: "<type>", template: true)
 
 Follow the **frontmatter** skill for correct field values per type.
 
-**Creating a new page:**
+**Creating a new page — direct write pattern:**
 
 If the source has associated assets (images, PDFs, diagrams), create
 a page bundle so assets live alongside the page:
 
 ```
 wiki_content_new(uri: "<slug>", bundle: true)
+→ { "path": "/abs/path/to/slug/index.md", "wiki_root": "...", ... }
 ```
 
 Otherwise create a regular page:
 
 ```
 wiki_content_new(uri: "<slug>", type: "<type>")
+→ { "path": "/abs/path/to/slug.md", "wiki_root": "...", ... }
 ```
 
-The page is scaffolded with frontmatter and a body template based on
-the type (from `schemas/<type>.md`). Overwrite the body with
-synthesized content:
+Write content directly to the returned `path` using your file tools
+(no MCP round-trip):
 
 ```
-wiki_content_write(uri: "<slug>", content: "<full markdown>")
+# Write the full markdown file directly to result.path
 ```
 
 For each page:

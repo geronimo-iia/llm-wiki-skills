@@ -216,28 +216,50 @@ Get the frontmatter scaffold:
 wiki_schema(action: "show", type: "<type>", template: true)
 ```
 
-Create the page:
+Create the page using the direct write pattern:
 
 ```
 wiki_content_new(uri: "<slug>", type: "<type>")
+→ { "uri": "wiki://...", "slug": "...", "path": "/abs/path/to/page.md",
+    "wiki_root": "/abs/path/to/wiki", "bundle": false }
 ```
 
-The page is scaffolded with frontmatter and a body template based on
-the type (from `schemas/<type>.md`). For custom types, add a `.md`
-file next to the schema.
+The response includes the local `path`. Write content directly to it,
+then ingest — no MCP content round-trip:
+
+```
+# Write content directly using your file tools (Edit / Write)
+wiki_ingest(path: "<slug>")
+```
 
 For a bundle:
 
 ```
 wiki_content_new(uri: "<slug>", bundle: true)
+→ { ..., "path": "/abs/path/to/slug/index.md", "bundle": true }
 ```
 
-Write the content and ingest:
+For targeted edits to an existing page (read current state first):
 
 ```
-wiki_content_write(uri: "<slug>", content: "<full markdown>")
-wiki_ingest(path: "<path-relative-to-wiki-root>")
+wiki_content_read(uri: "<slug>")
+# Edit specific sections
+wiki_content_write(uri: "<slug>", content: "<updated markdown>")
+wiki_ingest(path: "<slug>")
 ```
+
+## Direct write pattern
+
+When writing a new page or replacing a page entirely, prefer the direct
+write pattern to avoid sending content through MCP twice:
+
+1. `wiki_content_new(uri)` or `wiki_resolve(uri)` — get local path
+2. Write content directly to `path` using your file tools
+3. `wiki_ingest(path: "<slug>", dry_run: true)` — validate
+4. `wiki_ingest(path: "<slug>")` — commit
+
+Use `wiki_content_write` only when making targeted edits to an existing
+page where you need to read the current content first.
 
 Slugs are lowercase, hyphenated, relative to `wiki/`:
 `concepts/mixture-of-experts`, `sources/switch-transformer-2021`.
