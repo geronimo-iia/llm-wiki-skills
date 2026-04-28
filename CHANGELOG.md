@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - **Lint structural orientation** — `wiki_list(format: "llms")` documented in lint skill for structural gap analysis before judgment-based checks
 - **Graph `format: "llms"`** — graph skill documents `wiki_graph(format: "llms")` as the primary interpretation call; produces natural language description (clusters, hubs, isolated nodes, relation counts) without requiring Mermaid parsing; Mermaid/DOT retained for visualization
 - **Lint fix guidance completed** — fix instructions added for all 5 engine rules (`stale`, `unknown-type`, `missing-fields` were previously missing); `wiki_lint(wiki: "name")` parameter documented
+- `.mcp.json.example` — template for local development with a custom binary path and config; use when testing against a local build or non-default config path
 
 ### Changed
 
@@ -27,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - **Confidence guidance updated** — frontmatter skill rewrites the `### confidence` section with float scale table and conventional values (`0.9` well-corroborated, `0.5` single source, `0.2` speculative); anti-pattern row updated from `confidence: high` → `confidence: 0.9`
 - **Ingest skill** — confidence guidance for new pages notes `0.5` as the scaffold default
 - **Research skill** — confidence interpretation updated for float values in search results
+- `.gitignore` — added `mcp-config.json` and `.mcp.json.testing` (machine-specific local dev overrides)
 
 ## [0.3.1] — 2026-04-26
 

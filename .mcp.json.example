@@ -1,0 +1,6 @@
+{
+  "llm-wiki": {
+    "command": "/path/to/llm-wiki",
+    "args": ["--config", "/path/to/config.toml", "serve"]
+  }
+}
