@@ -105,24 +105,25 @@ The same slug is used regardless of which form is on disk.
 
 ## Wiki links
 
-`[[slug]]` links to another wiki page in the body:
+Two syntaxes create graph edges from a page body:
 
-```markdown
-See [[concepts/scaling-laws]] for background.
-```
+| Syntax | Notes |
+|--------|-------|
+| `[[slug]]` | Wiki-native shorthand |
+| `[text](slug)` | Standard Markdown — rendered by Hugo, indexed by the engine |
+| `[text](wiki://name/slug)` | Cross-wiki — portable format; works in Hugo CMS and any Markdown renderer |
 
-Wiki links create graph edges (generic `links-to` relation).
-Deduplicated per page — each slug appears once in the link list.
+All three appear in `body_links`, `wiki_graph`, backlinks, and are checked by
+the `broken-link` rule.
 
-**Cross-wiki links** use `wiki://` URI syntax:
-```yaml
-sources:
-  - concepts/local-concept       # same wiki
-  - wiki://other/concepts/foo    # page in the "other" wiki
-```
-Body text: `[[wiki://other/concepts/foo]]`
+**Prefer `[text](wiki://name/slug)` for cross-wiki references** — it is the
+portable format: indexed by the engine, rendered as a local link by Hugo CMS,
+and readable as plain Markdown everywhere.
 
-Cross-wiki targets appear as external nodes in `wiki_graph`; set `cross_wiki: true`
+External URLs, `mailto:`, anchor-only links (`#section`), and image links
+(`![alt](path)`) are not indexed.
+
+**Cross-wiki targets** appear as external nodes in `wiki_graph`; set `cross_wiki: true`
 to resolve them fully when both wikis are mounted.
 
 ## Read a page
