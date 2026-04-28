@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Added
 
+- **Direct write pattern in content skill** — `wiki_content_new` response now includes `path` and `wiki_root`; skill documents the pattern: create → write directly to `path` → `wiki_ingest`; removes one MCP content round-trip for new pages
+- **Direct write pattern in ingest skill** — step 2f updated to use `wiki_content_new` response `path` for direct file writes instead of `wiki_content_write`
+
 - **Crystallize two-step extraction** — explicit analysis step added before writes; extraction plan format with `What/Type/Action/Confidence` per item; user confirmation required before any page is created or updated
 - **Confidence calibration table** — 7-row table mapping session knowledge types (decision, pattern, finding, hypothesis, open-question, speculation) to suggested `confidence` ranges; adjustment guidance; default 0.5 rule
 - **Post-ingest lint step** — `wiki_lint(rules: "broken-link,orphan")` added after ingest in crystallize; catches dead references and orphan pages introduced by new session pages
