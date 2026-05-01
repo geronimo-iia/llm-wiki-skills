@@ -2,9 +2,10 @@
 name: configure-hugo
 description: >
   Install and configure llm-wiki-hugo-cms in a wiki repository so it
-  renders as a static Hugo site. Use when the user says "set up Hugo",
-  "add Hugo to this wiki", "make this wiki publishable", or "configure
-  Hugo rendering". Requires Hugo extended ≥ 0.147.0.
+  renders as a static Hugo site. Requires Hugo extended ≥ 0.147.0.
+when_to_use: >
+  Use when the user says "set up Hugo", "add Hugo to this wiki",
+  "make this wiki publishable", or "configure Hugo rendering".
 type: skill
 status: active
 last_updated: "2026-04-28"
@@ -25,6 +26,12 @@ it to render the wiki as a static Hugo site.
 - An existing wiki managed by llm-wiki (must have `wiki.toml` and `wiki/`)
 
 ## Step 1 — Read the wiki identity and repo path
+
+Resolve the wiki name in order:
+
+1. Read `wiki.toml` from the current working directory — extract the `name` field.
+2. Validate it exists via `wiki_spaces_list(name: "<name>")`.
+3. If `wiki.toml` is absent, unreadable, or the name is not found in `wiki_spaces_list`, ask the user: *"Which wiki should I configure Hugo for?"*
 
 ```
 wiki_spaces_list(name: "<name>")
