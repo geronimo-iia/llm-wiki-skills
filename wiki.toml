@@ -1,0 +1,5 @@
+[wiki]
+name        = "llm-wiki-skills"
+description = "Skills for the llm-wiki engine"
+wiki_root   = "skills"
+
