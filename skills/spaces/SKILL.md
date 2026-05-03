@@ -5,7 +5,7 @@ description: >
   the default wiki.
 type: skill
 status: active
-last_updated: "2025-07-21"
+last_updated: "2026-05-04"
 when_to_use: >
   Creating an additional wiki, listing registered wikis, inspecting
   a wiki, removing a wiki, or changing the default wiki.
@@ -88,6 +88,25 @@ wiki_spaces_create(path: "<path>", name: "<name>")
 ```
 
 Add `set_default: true` only if the user wants to switch to it.
+
+## Register an existing repository
+
+Use when the repository already has `wiki.toml` and pages — no files are
+created, no git commit is made:
+
+```
+wiki_spaces_register(path: "<path>")
+```
+
+Optional parameters:
+- `name` — override the name from `wiki.toml`
+- `wiki_root` — override `wiki_root` from `wiki.toml` (error if it conflicts with the value already in `wiki.toml`)
+
+Validates that the `wiki_root` directory exists before completing. If the
+server is running, hot-mounts the space immediately — no restart needed.
+
+Use `wiki_spaces_create` when starting from scratch. Use `wiki_spaces_register`
+when adopting an existing repository or syncing a cloned remote.
 
 ## Switch default wiki
 

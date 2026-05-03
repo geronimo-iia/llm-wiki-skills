@@ -2,10 +2,11 @@
 name: lint
 description: >
   Audit wiki quality — orphan pages, broken links, empty sections,
-  edge target type mismatches, and schema integrity.
+  edge target type mismatches, schema integrity, and structural graph
+  health (articulation points, bridges, peripheral pages).
 type: skill
 status: active
-last_updated: "2026-04-27"
+last_updated: "2026-05-04"
 disable-model-invocation: false
 when_to_use: >
   Auditing wiki structure, checking for broken links or orphan pages,
@@ -41,11 +42,21 @@ This returns a JSON report with `findings` grouped by rule:
 | `missing-fields` | error | Required frontmatter fields absent per type schema |
 | `stale` | warning | Old `last_updated` AND low `confidence` (both must hold) |
 | `unknown-type` | error | `type` field not registered in the type registry |
+| `articulation-point` | warning | Page whose removal disconnects the graph (undirected view); O(n+e) |
+| `bridge` | warning | Link whose removal disconnects the graph (undirected view); O(n+e) |
+| `periphery` | warning | Most structurally isolated pages — eccentricity equals diameter; skipped above `max_nodes_for_diameter` |
 
 Run a subset of rules:
 
 ```
 wiki_lint(rules: "orphan,broken-link")
+```
+
+Run structural rules only (graph-based, O(n+e) for articulation-point and bridge,
+O(n²) for periphery — skipped when `local_count > graph.max_nodes_for_diameter`):
+
+```
+wiki_lint(rules: "articulation-point,bridge,periphery")
 ```
 
 Filter to errors only (CI-suitable):
@@ -100,16 +111,19 @@ to an index query.
 
 ### Structural orientation
 
-For a full-wiki structural overview before gap analysis, use
-`format: "llms"` to get all pages grouped by type with summaries:
+For structural health — pages and links whose removal would disconnect the graph:
+
+```
+wiki_lint(rules: "articulation-point,bridge,periphery")
+```
+
+For a full-wiki page overview before gap analysis, use `format: "llms"`:
 
 ```
 wiki_list(format: "llms")
 ```
 
-This replaces paginated listing for broad enumeration — one call
-covers the full wiki, grouped and annotated, without needing multiple
-`page_size: 100` calls.
+This covers the full wiki grouped by type with summaries — one call, no pagination.
 
 ### Empty sections
 
@@ -154,7 +168,7 @@ Requires relevance judgment — don't link for graph density.
 
 Present findings grouped by category, leading with `wiki_lint` output:
 
-- **Engine findings** — orphans, broken links, missing fields, stale, unknown types
+- **Engine findings** — orphans, broken links, missing fields, stale, unknown types, articulation points, bridges, peripheral pages
 - **Schema issues** — invalid schemas, field conflicts
 - **Edge type mismatches** — wrong target types on graph edges
 - **Empty sections** — sections with no children

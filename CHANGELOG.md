@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project adheres to [Semantic Versioning](https://semver.org).
 
+## [0.4.2] — 2026-05-04
+
+### Changed
+
+- **lint skill** — added `articulation-point`, `bridge`, `periphery` structural rules to deterministic checks table; added structural rules usage example; fixed "Structural orientation" section to use `wiki_lint` structural rules instead of `wiki_list`
+- **config skill** — added `graph.snapshot`, `graph.snapshot_format`, `graph.structural_algorithms`, `graph.max_nodes_for_diameter`, `graph.min_nodes_for_communities` to overridable settings; added `serve.acp_max_sessions` to global-only settings
+- **configure-hugo skill** — Step 1 extracts `wiki_root`; Step 4 updates `contentDir` when `wiki_root` is non-default; prevents blank-render bug
+- **spaces skill** — added `wiki_spaces_register` section for adopting existing repositories
+- **graph skill** — "Bridge nodes" bullet points to `wiki_lint(rules: "articulation-point,bridge")`; community insights section documents `diameter`, `radius`, `center`, `structural_note` fields from `wiki_stats`
+- **README** — added `wiki_spaces_register`, `wiki_resolve`, `wiki_export` to tool-mapping table; updated `wiki_stats` description to mention structural topology; added `stats` and `export` to skill inventory
+
+### Added
+
+- **stats skill** — wiki health dashboard interpreter: reads all `wiki_stats` fields, triage decision tree, CI health gate pattern, community cluster and structural topology guidance
+- **export skill** — publishing and handoff workflow: format selection guide (`llms-txt`/`llms-full`/`json`), re-export triggers, `llms.txt` ecosystem publishing pattern
+
 ## [0.4.1] - 2026-05-01
 
 ### Fixed

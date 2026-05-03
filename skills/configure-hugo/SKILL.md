@@ -8,7 +8,7 @@ when_to_use: >
   "make this wiki publishable", or "configure Hugo rendering".
 type: skill
 status: active
-last_updated: "2026-04-28"
+last_updated: "2026-05-04"
 tags: [hugo, publishing, configuration]
 owner: jguibert@gmail.com
 metadata:
@@ -41,6 +41,9 @@ wiki_spaces_list(name: "<name>")
 Collect the wiki `name` (needed for `hugo.toml` title) and `path` (the repo
 root — all subsequent file operations use `<path>/site/...`).
 
+Also read `wiki.toml` directly from `<path>/wiki.toml` and extract the
+`wiki_root` field (default: `"wiki"` if absent). Store it — needed in Step 4.
+
 ## Step 2 — Check for existing scaffold
 
 The scaffold lives at `<path>/site/hugo.toml`. Check whether that file
@@ -70,9 +73,21 @@ baseURL = "https://<github-username>.github.io/<repo-name>/"
 title   = "<wiki name from wiki.toml>"
 ```
 
-Write the updated file directly to disk. Everything else — `contentDir`,
-module mounts, excludeFiles, frontmatter mapping, taxonomies — is
-pre-configured and must not be changed.
+Write the updated file directly to disk.
+
+If `wiki_root` from Step 1 is not `"wiki"` (e.g. `"content"`, `"docs"`), also
+update the `contentDir` field:
+
+```toml
+contentDir = "<wiki_root>"
+```
+
+The scaffold defaults to `contentDir = "wiki"`. A mismatch means Hugo renders
+nothing — pages simply don't appear. This is the most common setup error for
+wikis using a non-default `wiki_root`.
+
+Everything else — module mounts, excludeFiles, frontmatter mapping,
+taxonomies — is pre-configured and must not be changed.
 
 ## Step 5 — Commit the installation
 

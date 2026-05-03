@@ -5,7 +5,7 @@ description: >
   per-wiki overrides, and resolution order.
 type: skill
 status: active
-last_updated: "2025-07-21"
+last_updated: "2026-05-04"
 when_to_use: >
   Reading or changing configuration, understanding what settings
   are available, or troubleshooting unexpected behavior caused by
@@ -150,6 +150,11 @@ These keys can appear in both `config.toml` and `wiki.toml`.
 | `graph.depth` | `3` | Default hop limit for graph traversal |
 | `graph.type` | `[]` | Page types to include; empty = all |
 | `graph.output` | `""` | Default output path; empty = stdout |
+| `graph.snapshot` | `true` | Persist graph to disk for warm-start across restarts |
+| `graph.snapshot_format` | `bincode+lz4` | Snapshot serialization format: `bincode+lz4` or `bincode+zstd` |
+| `graph.structural_algorithms` | `true` | Enable diameter/radius/center in `wiki_stats`; `false` skips O(n²) |
+| `graph.max_nodes_for_diameter` | `2000` | Skip structural algorithms when local node count exceeds this |
+| `graph.min_nodes_for_communities` | `30` | Minimum pages before Louvain community detection runs |
 | `index.memory_budget_mb` | `50` | Tantivy writer memory budget in MB |
 | `index.tokenizer` | `en_stem` | Tantivy tokenizer for text fields |
 
@@ -169,6 +174,7 @@ These keys can only appear in `config.toml`. Setting them in
 | `serve.max_restarts` | `10` | Max transport restarts; `0` = no restart |
 | `serve.restart_backoff` | `1` | Initial backoff seconds; doubles, cap 30s |
 | `serve.heartbeat_secs` | `60` | Heartbeat interval; `0` = disabled |
+| `serve.acp_max_sessions` | `20` | Max concurrent ACP sessions; `NewSession` returns error when exceeded |
 | `logging.log_path` | `~/.llm-wiki/logs` | Log file directory; empty = stderr only |
 | `logging.log_rotation` | `daily` | `daily`, `hourly`, `never` |
 | `logging.log_max_files` | `7` | Max rotated files; `0` = unlimited |
