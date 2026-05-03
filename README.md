@@ -56,6 +56,8 @@ claude --plugin-dir ./llm-wiki-skills
 | `graph`           | `/llm-wiki:graph`          | Generate and interpret the concept graph                |
 | `frontmatter`     | Auto (background)          | Reference for writing correct frontmatter               |
 | `configure-hugo`  | `/llm-wiki:configure-hugo` | Configure a wiki for Hugo rendering                     |
+| `stats`           | `/llm-wiki:stats`          | Wiki health dashboard — interpret metrics and triage    |
+| `export`          | `/llm-wiki:export`         | Export wiki to llms.txt, llms-full, or JSON             |
 
 ## How Skills Relate to MCP Tools
 
@@ -65,13 +67,15 @@ orchestrate these tools into workflows.
 
 | Tool group       | Tools                                                                                                          | Used by skills                             |
 | ---------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| Space management | `wiki_spaces_create`, `wiki_spaces_list`, `wiki_spaces_remove`, `wiki_spaces_set_default`                      | setup, spaces, ingest                      |
-| Configuration    | `wiki_config`                                                                                                  | config, bootstrap, configure-hugo          |
-| Schema           | `wiki_schema`                                                                                                  | schema, frontmatter, content, ingest, lint |
-| Content          | `wiki_content_read`, `wiki_content_write`, `wiki_content_new`, `wiki_content_commit`                           | content, ingest, crystallize, lint         |
-| Search & index   | `wiki_search`, `wiki_list`, `wiki_ingest`, `wiki_index_rebuild`, `wiki_index_status`                           | research, content, ingest, lint            |
-| Graph            | `wiki_graph`                                                                                                   | graph, research, lint, crystallize         |
-| Knowledge        | `wiki_stats`, `wiki_suggest`, `wiki_history`                                                                   | content, research, bootstrap, lint         |
+| Space management | `wiki_spaces_create`, `wiki_spaces_list`, `wiki_spaces_remove`, `wiki_spaces_set_default`, `wiki_spaces_register` | setup, spaces, ingest                      |
+| Configuration    | `wiki_config`                                                                                                     | config, bootstrap, configure-hugo          |
+| Schema           | `wiki_schema`                                                                                                     | schema, frontmatter, content, ingest, lint |
+| Content          | `wiki_content_read`, `wiki_content_write`, `wiki_content_new`, `wiki_content_commit`                              | content, ingest, crystallize, lint         |
+| Search & index   | `wiki_search`, `wiki_list`, `wiki_ingest`, `wiki_index_rebuild`, `wiki_index_status`                              | research, content, ingest, lint            |
+| Graph            | `wiki_graph`                                                                                                      | graph, research, lint, crystallize         |
+| Knowledge        | `wiki_stats` (health + structural topology), `wiki_suggest`, `wiki_history`                                       | content, research, bootstrap, lint, stats  |
+| Resolve          | `wiki_resolve`                                                                                                    | content, ingest                            |
+| Export           | `wiki_export`                                                                                                     | export                                     |
 
 The engine is a dumb pipe. Skills are the brain.
 

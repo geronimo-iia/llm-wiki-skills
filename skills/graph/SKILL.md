@@ -5,7 +5,7 @@ description: >
   labeled edges, relation filtering, and subgraph extraction.
 type: skill
 status: active
-last_updated: "2026-04-27"
+last_updated: "2026-05-04"
 disable-model-invocation: false
 argument-hint: "[--type concept] [--root slug] [--depth N] [--relation fed-by]"
 when_to_use: >
@@ -136,7 +136,7 @@ Analyze the graph structure for:
 - **Clusters** — groups of tightly connected pages (knowledge domains)
 - **Isolated nodes** — pages with no connections (potential orphans)
 - **Key hubs** — pages with high degree (important concepts)
-- **Bridge nodes** — pages connecting otherwise separate clusters
+- **Bridge nodes** — pages connecting otherwise separate clusters; use `wiki_lint(rules: "articulation-point,bridge")` for deterministic identification
 - **Missing edges** — concepts that should be linked but aren't
 
 ## Community insights
@@ -155,6 +155,16 @@ highest-value link suggestions.
 
 When `communities` is `null` (wiki below 30 pages), identify clusters manually
 from the Mermaid or DOT output.
+
+`wiki_stats()` also returns structural topology fields when
+`graph.structural_algorithms = true` (default):
+
+- `diameter` — longest shortest path; high value means the graph is elongated
+- `radius` — minimum eccentricity; close to `diameter` means no strong center
+- `center` — slugs with eccentricity equal to `radius`; these are the most
+  central hub pages — consider linking sparse nodes through them
+- `structural_note` — non-null only when O(n²) algorithms were skipped due to
+  graph size (`local_count > graph.max_nodes_for_diameter`)
 
 ## Suggest improvements
 

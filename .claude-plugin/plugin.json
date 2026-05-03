@@ -1,6 +1,6 @@
 {
   "name": "llm-wiki",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Skills for the llm-wiki engine — content, ingest, research, graph, schema, spaces, config, and more.",
   "author": { "name": "geronimo-iia" },
   "license": "MIT OR Apache-2.0",
