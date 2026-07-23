@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project adheres to [Semantic Versioning](https://semver.org).
 
+## [0.4.3] — 2026-07-23
+
+### Changed
+
+- **export skill** — documented `frontmatter` field in JSON output: schema-specific keys (e.g. `deciders`, `created`) appear under `frontmatter`; pages with no extra fields omit the key; added example JSON object
+- **config skill** — added `search.status.<key>` to overridable settings table; added "Search status weights" section with examples for built-in and custom status values; per-wiki override guidance
+
 ## [0.4.2] — 2026-05-04
 
 ### Changed

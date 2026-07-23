@@ -5,7 +5,7 @@ description: >
   per-wiki overrides, and resolution order.
 type: skill
 status: active
-last_updated: "2026-05-04"
+last_updated: "2026-07-23"
 when_to_use: >
   Reading or changing configuration, understanding what settings
   are available, or troubleshooting unexpected behavior caused by
@@ -155,8 +155,29 @@ These keys can appear in both `config.toml` and `wiki.toml`.
 | `graph.structural_algorithms` | `true` | Enable diameter/radius/center in `wiki_stats`; `false` skips O(n²) |
 | `graph.max_nodes_for_diameter` | `2000` | Skip structural algorithms when local node count exceeds this |
 | `graph.min_nodes_for_communities` | `30` | Minimum pages before Louvain community detection runs |
+| `search.status.<key>` | — | Override search weight for a status value; key is a status slug (e.g. `active`, `draft`), value is a float |
 | `index.memory_budget_mb` | `50` | Tantivy writer memory budget in MB |
 | `index.tokenizer` | `en_stem` | Tantivy tokenizer for text fields |
+
+## Search status weights
+
+Control how much each status value contributes to search ranking.
+Higher weight = pages with that status rank higher in results.
+
+```
+wiki_config(action: "set", key: "search.status.active", value: "1.2")
+wiki_config(action: "set", key: "search.status.draft", value: "0.3")
+wiki_config(action: "set", key: "search.status.archived", value: "0.1")
+```
+
+Custom status values defined in your schemas work the same way:
+
+```
+wiki_config(action: "set", key: "search.status.accepted", value: "1.5")
+```
+
+Per-wiki overrides take precedence over global values — use them when a
+wiki has a domain-specific status taxonomy (e.g. ADR `accepted`/`superseded`).
 
 ## Global-only settings
 

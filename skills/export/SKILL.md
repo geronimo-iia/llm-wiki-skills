@@ -5,7 +5,7 @@ description: >
   for deep offline analysis, or JSON for batch processing.
 type: skill
 status: active
-last_updated: "2026-05-04"
+last_updated: "2026-07-23"
 disable-model-invocation: false
 when_to_use: >
   Publishing the wiki as llms.txt, handing off wiki content to an
@@ -76,6 +76,27 @@ wiki_export(wiki: "research", format: "json", path: "export/pages.json")
 
 Each JSON object includes `slug`, `uri`, `title`, `type`, `status`,
 `confidence`, `summary`, and `body`.
+
+Pages with frontmatter fields beyond the standard set also include a
+`frontmatter` object containing those extra keys:
+
+```json
+{
+  "slug": "decisions/adr-001",
+  "title": "Use PostgreSQL",
+  "type": "decision",
+  "status": "accepted",
+  "body": "...",
+  "frontmatter": {
+    "deciders": ["alice", "bob"],
+    "created": "2026-01-15"
+  }
+}
+```
+
+Pages with no extra frontmatter fields omit the `frontmatter` key entirely.
+Use this to access schema-specific fields (decision records, ADRs, custom
+types) in downstream pipelines without parsing raw Markdown.
 
 ## Response
 
