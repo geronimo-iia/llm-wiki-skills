@@ -19,10 +19,11 @@ with `status: draft` in the frontmatter.
 
 1. Open `skills/<name>/SKILL.md`
 2. Update `last_updated` in the frontmatter to today's date
-3. Verify all tool calls match the engine's current parameter names
+3. Update `compatibility` if the change requires a newer engine version
+4. Verify all tool calls match the engine's current parameter names
    and types — the most common mistakes are wrong parameter types
    and non-existent parameters
-4. Test the workflow end-to-end in a real wiki session
+5. Test the workflow end-to-end in a real wiki session
 
 ## Adding a skill
 
@@ -40,8 +41,7 @@ when_to_use: >
   Situations where an agent should activate this skill.
 tags: [tag1, tag2]
 owner: <your-email>
-metadata:
-  version: "0.1.0"
+compatibility: "llm-wiki >= X.Y.Z"
 ---
 ```
 
@@ -58,6 +58,7 @@ metadata:
       not an array — omit to commit all
 - [ ] `wiki_list` does not accept a `path` parameter
 - [ ] `last_updated` is set to today
+- [ ] `compatibility` reflects the minimum engine version required
 - [ ] Skill is listed in `README.md` inventory
 
 ## Updating the version
