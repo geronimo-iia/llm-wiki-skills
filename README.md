@@ -57,6 +57,7 @@ claude --plugin-dir ./llm-wiki-skills
 | `frontmatter`     | Auto (background)          | Reference for writing correct frontmatter               |
 | `configure-hugo`  | `/llm-wiki:configure-hugo` | Configure a wiki for Hugo rendering                     |
 | `stats`           | `/llm-wiki:stats`          | Wiki health dashboard — interpret metrics and triage    |
+| `review`          | `/llm-wiki:review`         | Process drafts, low-confidence pages, lint findings     |
 | `export`          | `/llm-wiki:export`         | Export wiki to llms.txt, llms-full, or JSON             |
 
 ## How Skills Relate to MCP Tools
@@ -73,6 +74,7 @@ orchestrate these tools into workflows.
 | Content          | `wiki_content_read`, `wiki_content_write`, `wiki_content_new`, `wiki_content_commit`                              | content, ingest, crystallize, lint         |
 | Search & index   | `wiki_search`, `wiki_list`, `wiki_ingest`, `wiki_index_rebuild`, `wiki_index_status`                              | research, content, ingest, lint            |
 | Graph            | `wiki_graph`                                                                                                      | graph, research, lint, crystallize         |
+| Audit            | `wiki_lint`                                                                                                       | lint, stats, crystallize, review           |
 | Knowledge        | `wiki_stats` (health + structural topology), `wiki_suggest`, `wiki_history`                                       | content, research, bootstrap, lint, stats  |
 | Resolve          | `wiki_resolve`                                                                                                    | content, ingest                            |
 | Export           | `wiki_export`                                                                                                     | export                                     |

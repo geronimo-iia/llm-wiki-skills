@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project adheres to [Semantic Versioning](https://semver.org).
 
+## [0.5.0] — 2026-07-24
+
+### Changed
+
+- all 16 skills: replaced `metadata.version` with first-class `compatibility` field (`"llm-wiki >= X.Y.Z"`)
+- **configure-hugo skill** — fixed duplicate Step 6 heading (Deploy section renumbered to Step 7)
+- **crystallize skill** — removed stale engine version note (v0.2.0 compatibility disclaimer)
+- **review skill** — fixed `wiki_content_read(slug:)` → `wiki_content_read(uri:)` (parameter name alignment)
+
+### Added
+
+- **README** — added `review` skill to inventory table; added `wiki_lint` to MCP tool-mapping table
+
 ## [0.4.3] — 2026-07-23
 
 ### Changed
