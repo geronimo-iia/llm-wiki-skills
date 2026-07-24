@@ -12,8 +12,7 @@ when_to_use: >
   config values.
 tags: [config, settings, configuration]
 owner: jguibert@gmail.com
-metadata:
-  version: "0.1.0"
+compatibility: "llm-wiki >= 0.5.0"
 ---
 
 # Config

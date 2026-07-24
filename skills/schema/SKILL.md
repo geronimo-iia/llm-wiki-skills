@@ -12,8 +12,7 @@ when_to_use: >
   or validating schemas.
 tags: [schema, types, validation, type-system]
 owner: jguibert@gmail.com
-metadata:
-  version: "0.1.0"
+compatibility: "llm-wiki >= 0.4.0"
 ---
 
 # Schema

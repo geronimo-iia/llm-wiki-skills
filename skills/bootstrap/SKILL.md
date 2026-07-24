@@ -11,8 +11,7 @@ when_to_use: >
   orientation to a wiki's structure and content is needed.
 tags: [bootstrap, session, orientation]
 owner: jguibert@gmail.com
-metadata:
-  version: "0.3.0"
+compatibility: "llm-wiki >= 0.4.0"
 ---
 
 # Bootstrap

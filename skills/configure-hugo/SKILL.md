@@ -11,8 +11,7 @@ status: active
 last_updated: "2026-05-04"
 tags: [hugo, publishing, configuration]
 owner: jguibert@gmail.com
-metadata:
-  version: "0.2.0"
+compatibility: "llm-wiki >= 0.4.0"
 ---
 
 # configure-hugo
@@ -114,7 +113,7 @@ hugo server --buildDrafts
 
 The URL is printed by Hugo (e.g. `http://localhost:1313/<repo-name>/`).
 
-## Step 6 — Deploy (optional)
+## Step 7 — Deploy (optional)
 
 If the user wants GitHub Pages deployment:
 

@@ -6,7 +6,7 @@ description: >
   health (articulation points, bridges, peripheral pages).
 type: skill
 status: active
-last_updated: "2026-05-04"
+last_updated: "2026-07-25"
 disable-model-invocation: false
 when_to_use: >
   Auditing wiki structure, checking for broken links or orphan pages,
@@ -14,8 +14,7 @@ when_to_use: >
   changes.
 tags: [lint, audit, quality, structure]
 owner: jguibert@gmail.com
-metadata:
-  version: "0.5.0"
+compatibility: "llm-wiki >= 0.5.1"
 ---
 
 # Lint
@@ -40,7 +39,7 @@ This returns a JSON report with `findings` grouped by rule:
 | `broken-link` | error | Slugs in `body_links` or frontmatter edge fields that don't exist |
 | `broken-cross-wiki-link` | warning | `wiki://` URI pointing to a wiki not currently mounted |
 | `missing-fields` | error | Required frontmatter fields absent per type schema |
-| `stale` | warning | Old `last_updated` AND low `confidence` (both must hold) |
+| `stale` | warning | Old `last_updated` AND low `confidence` (both must hold); applies only to `status: active` pages |
 | `unknown-type` | error | `type` field not registered in the type registry |
 | `articulation-point` | warning | Page whose removal disconnects the graph (undirected view); O(n+e) |
 | `bridge` | warning | Link whose removal disconnects the graph (undirected view); O(n+e) |

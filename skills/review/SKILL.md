@@ -13,8 +13,7 @@ when_to_use: >
   flagged contradictions, or doing a periodic wiki quality pass.
 tags: [review, quality, audit]
 owner: jguibert@gmail.com
-metadata:
-  version: "0.1.0"
+compatibility: "llm-wiki >= 0.4.0"
 ---
 
 # Review
@@ -72,7 +71,7 @@ Process items one at a time. For each page:
 ### 3a. Read the page
 
 ```
-wiki_content_read(slug: "<slug>", backlinks: true)
+wiki_content_read(uri: "<slug>", backlinks: true)
 wiki_history(slug: "<slug>", limit: 3)
 ```
 

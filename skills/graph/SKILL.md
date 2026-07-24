@@ -5,7 +5,7 @@ description: >
   labeled edges, relation filtering, and subgraph extraction.
 type: skill
 status: active
-last_updated: "2026-05-04"
+last_updated: "2026-07-25"
 disable-model-invocation: false
 argument-hint: "[--type concept] [--root slug] [--depth N] [--relation fed-by]"
 when_to_use: >
@@ -14,8 +14,7 @@ when_to_use: >
   content changes.
 tags: [graph, visualization, structure, edges]
 owner: jguibert@gmail.com
-metadata:
-  version: "0.5.0"
+compatibility: "llm-wiki >= 0.5.1"
 ---
 
 # Graph

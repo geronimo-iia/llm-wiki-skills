@@ -12,8 +12,7 @@ when_to_use: >
   knows about a topic, or identifying knowledge gaps.
 tags: [research, search, synthesis]
 owner: jguibert@gmail.com
-metadata:
-  version: "0.3.0"
+compatibility: "llm-wiki >= 0.4.0"
 ---
 
 # Research

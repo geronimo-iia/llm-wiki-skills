@@ -11,8 +11,7 @@ when_to_use: >
   a wiki, removing a wiki, or changing the default wiki.
 tags: [spaces, multi-wiki]
 owner: jguibert@gmail.com
-metadata:
-  version: "0.1.0"
+compatibility: "llm-wiki >= 0.4.0"
 ---
 
 # Spaces

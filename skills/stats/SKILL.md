@@ -14,8 +14,7 @@ when_to_use: >
   assessing structural quality of the knowledge graph.
 tags: [stats, health, graph, quality]
 owner: jguibert@gmail.com
-metadata:
-  version: "0.1.0"
+compatibility: "llm-wiki >= 0.4.0"
 ---
 
 # Stats

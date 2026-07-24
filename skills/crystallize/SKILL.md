@@ -13,8 +13,7 @@ when_to_use: >
   always confirm with the user before writing.
 tags: [crystallize, session, knowledge-capture]
 owner: jguibert@gmail.com
-metadata:
-  version: "0.3.0"
+compatibility: "llm-wiki >= 0.4.0"
 ---
 
 # Crystallize
@@ -179,10 +178,6 @@ This catches:
 
 Fix any `Error` findings before closing the session. `Warning` findings
 (orphan on a newly created standalone page) can be deferred.
-
-> **Note:** `wiki_lint` ships with engine v0.2.0. If the command is not
-> recognized, skip this step and follow the **lint** skill manually for
-> broken-link and orphan checks.
 
 ## Verify
 

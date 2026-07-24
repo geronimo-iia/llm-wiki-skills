@@ -7,7 +7,7 @@ description: >
   Source files move to raw/ on successful ingest.
 type: skill
 status: active
-last_updated: "2026-04-27"
+last_updated: "2026-07-25"
 disable-model-invocation: true
 argument-hint: "[file-or-folder-path]"
 when_to_use: >
@@ -15,8 +15,7 @@ when_to_use: >
   content to the wiki.
 tags: [ingest, workflow, sources]
 owner: jguibert@gmail.com
-metadata:
-  version: "0.5.0"
+compatibility: "llm-wiki >= 0.5.1"
 ---
 
 # Ingest
