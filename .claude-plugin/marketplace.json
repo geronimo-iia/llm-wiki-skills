@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "geronimo-iia",
+  "description": "Plugins by geronimo-iia.",
+  "owner": {
+    "name": "geronimo-iia",
+    "url": "https://github.com/geronimo-iia"
+  },
+  "plugins": [
+    {
+      "name": "llm-wiki",
+      "description": "Skills for the llm-wiki engine — content, ingest, research, graph, schema, spaces, config, and more.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}
