@@ -5,13 +5,13 @@ description: >
   structure, review hub pages.
 type: skill
 status: active
-last_updated: "2026-04-26"
+last_updated: "2026-08-15"
 when_to_use: >
   At the start of a session, when switching wikis, or when
   orientation to a wiki's structure and content is needed.
 tags: [bootstrap, session, orientation]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.4.0"
+compatibility: "llm-wiki >= 0.5.7"
 ---
 
 # Bootstrap
@@ -19,6 +19,19 @@ compatibility: "llm-wiki >= 0.4.0"
 Bring the agent from zero to oriented using the wiki itself.
 
 ## Steps
+
+### 0. Check server identity and index health
+
+```
+wiki_info()
+```
+
+Returns server version, config path, registered spaces, default wiki,
+and index status (`"ok"` or `"degraded"`).
+
+If `index_status` is `"degraded"`, warn the user before proceeding:
+the index may be incomplete or stale, so stats and search results
+could be unreliable. Suggest running `wiki_index_rebuild()` to recover.
 
 ### 1. Read configuration
 
