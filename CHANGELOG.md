@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project adheres to [Semantic Versioning](https://semver.org).
 
+## [0.5.7] — 2026-08-15
+
+### Changed
+
+- **bootstrap skill** — added step 0: call `wiki_info()` for server identity and index health check; warn user if `index_status` is `"degraded"`; bumped `compatibility` to `llm-wiki >= 0.5.7`
+- **plugin.json** — bumped version to `0.5.7`
+
 ## [0.5.0] — 2026-07-24
 
 ### Changed
