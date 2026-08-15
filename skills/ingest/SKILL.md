@@ -52,6 +52,13 @@ wiki_ingest(path: "inbox/", dry_run: true)
 
 If no files are found, report "No files to process." and stop.
 
+### Step 1.5 — Filter the queue
+
+**Skip proactively** — do not attempt to process:
+- Binary files: `.pdf`, `.jpg`, `.jpeg`, `.png`, `.drawio`, `.gif`
+- Raw source `.txt` files when a higher-level analysis of the same source already exists in the queue
+- Deprecated documents superseded by a newer version — record as skipped with reason
+
 Process files one at a time — complete all sub-steps for one file
 before moving to the next.
 
@@ -69,6 +76,10 @@ Natively readable: `.md`, `.txt`, `.csv`, `.json`, `.yaml`, `.html`,
 
 If reading fails (binary, unsupported format): note the reason and
 skip to step 2h. The file stays in inbox/ for manual handling.
+
+Also skip proactively (without attempting to read) if the file matches
+the skip rules from Step 1.5 — binary, superseded raw extract, or
+deprecated document. Record the reason in step 2h.
 
 #### 2b. Classify the source
 
@@ -174,6 +185,9 @@ Source: "Mixtral of Experts" (paper, 2024)
 
 Present the plan to the user and confirm before writing. If the user redirects
 (e.g. "skip item 2", "merge 1 and 2"), update the plan before proceeding.
+
+If no user confirmation is available (automated pipeline), proceed with the
+plan as written — flag any contradictions as `status: draft` for manual review.
 
 #### 2e. Decide: create or update
 
