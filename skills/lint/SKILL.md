@@ -25,11 +25,33 @@ offer fixes.
 ## Deterministic checks (engine)
 
 Start every audit by running the engine lint tool. These checks are
-index-based, deterministic, and fast:
+index-based, deterministic, and fast.
 
+**For small wikis (< 200 pages):**
 ```
 wiki_lint()
 ```
+
+**For large wikis (200+ pages): use the three-phase sequence to avoid
+oversized responses.**
+
+Phase 1 — triage (counts only, no findings):
+```
+wiki_lint(summary: true)
+```
+Returns `by_rule` counts. Identify which rule has the most findings before
+requesting the full list.
+
+Phase 2 — scope (single rule, optional subtree):
+```
+wiki_lint(rules: "missing-fields", path_prefix: "nrg-architecture/studies")
+```
+
+Phase 3 — paginate only if the scoped result is still large:
+```
+wiki_lint(rules: "missing-fields", path_prefix: "nrg-architecture/studies", page_size: 100)
+```
+Pass the returned `next_cursor` to the next call until `has_more` is false.
 
 This returns a JSON report with `findings` grouped by rule:
 
