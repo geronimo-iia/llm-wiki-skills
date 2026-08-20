@@ -6,13 +6,13 @@ description: >
   exploration, and gap identification.
 type: skill
 status: active
-last_updated: "2026-04-27"
+last_updated: "2026-08-20"
 when_to_use: >
   Answering a question from wiki knowledge, exploring what the wiki
   knows about a topic, or identifying knowledge gaps.
 tags: [research, search, synthesis]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.4.0"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Research
@@ -42,7 +42,7 @@ For narrow, specific queries, skip this step and go straight to search.
 
 BM25 full-text search across `title`, `summary`, `read_when`, `tldr`,
 `tags`, and body text. Results always include facets (`type`, `status`,
-`tags` distributions):
+`tags` distributions) — computed from FAST-field keyword indexes at no extra cost:
 
 ```
 wiki_search(query: "<topic>")

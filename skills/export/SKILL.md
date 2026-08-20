@@ -13,7 +13,7 @@ when_to_use: >
   or auditing all pages without pagination.
 tags: [export, publishing, llms-txt, batch]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.5.0"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Export

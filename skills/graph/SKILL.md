@@ -14,7 +14,7 @@ when_to_use: >
   content changes.
 tags: [graph, visualization, structure, edges]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.5.1"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Graph

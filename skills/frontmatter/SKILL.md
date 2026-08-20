@@ -13,7 +13,7 @@ when_to_use: >
   reference for correct frontmatter fields and conventions.
 tags: [frontmatter, reference, types]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.4.0"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Frontmatter Reference

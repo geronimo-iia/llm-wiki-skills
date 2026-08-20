@@ -13,7 +13,7 @@ when_to_use: >
   flagged contradictions, or doing a periodic wiki quality pass.
 tags: [review, quality, audit]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.4.0"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Review

@@ -13,7 +13,7 @@ when_to_use: >
   always confirm with the user before writing.
 tags: [crystallize, session, knowledge-capture]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.4.0"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Crystallize

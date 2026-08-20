@@ -14,7 +14,7 @@ when_to_use: >
   content, or organizing wiki structure.
 tags: [content, write, create, read, update, section, authoring]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.4.0"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Content

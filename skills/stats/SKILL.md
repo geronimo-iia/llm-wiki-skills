@@ -6,7 +6,7 @@ description: >
   metrics and decide what to fix next.
 type: skill
 status: active
-last_updated: "2026-05-04"
+last_updated: "2026-08-20"
 disable-model-invocation: false
 when_to_use: >
   Getting a quick health overview before a work session, deciding
@@ -14,7 +14,7 @@ when_to_use: >
   assessing structural quality of the knowledge graph.
 tags: [stats, health, graph, quality]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.4.0"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Stats
@@ -43,7 +43,7 @@ stale: check `index.stale`. Rebuild with `wiki_index_rebuild` if needed.
 `sections` — section index pages. Excluded from most metrics (orphan
 check, staleness, structural rules) to avoid noise.
 
-`types` / `status` — facet distributions. High `draft` count → run
+`types` / `status` — facet distributions (keyword FAST fields — computed per segment, no stored-doc fetch). High `draft` count → run
 `wiki_lint(rules: "stale")` or audit drafts manually.
 
 ### Orphans and connectivity

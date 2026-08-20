@@ -15,7 +15,7 @@ when_to_use: >
   content to the wiki.
 tags: [ingest, workflow, sources]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.5.1"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Ingest

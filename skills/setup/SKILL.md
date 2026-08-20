@@ -13,7 +13,7 @@ when_to_use: >
   wiki.
 tags: [setup, install]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.5.0"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Setup

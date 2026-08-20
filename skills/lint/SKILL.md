@@ -6,7 +6,7 @@ description: >
   health (articulation points, bridges, peripheral pages).
 type: skill
 status: active
-last_updated: "2026-07-25"
+last_updated: "2026-08-20"
 disable-model-invocation: false
 when_to_use: >
   Auditing wiki structure, checking for broken links or orphan pages,
@@ -14,7 +14,7 @@ when_to_use: >
   changes.
 tags: [lint, audit, quality, structure]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.5.1"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Lint
@@ -151,7 +151,7 @@ a source?
 wiki_stats()
 ```
 
-The `status` facet shows the distribution (e.g. `active: 40, draft: 3`).
+The `status` facet (keyword FAST field) shows the distribution (e.g. `active: 40, draft: 3`).
 Review draft pages: are they progressing, abandoned, or placeholders?
 
 ### Under-linked pages
