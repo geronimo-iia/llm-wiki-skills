@@ -6,7 +6,7 @@ description: >
   files, confirms before deletion, and commits changes per wiki.
 type: skill
 status: active
-last_updated: "2026-08-22"
+last_updated: "2026-08-26"
 when_to_use: >
   After upgrading llm-wiki to 1.0.0, when a wiki was created with a previous
   version and has stock schema copies in its schemas/ directory that are now
@@ -69,6 +69,42 @@ If `kept_custom` is non-empty for any wiki, add this explanation:
 > "Files listed under 'Kept (custom overrides)' differ from every known stock
 > version. They are genuine customisations and will NOT be touched. After
 > migration they continue to work as overrides on top of the embedded defaults."
+
+Then, for each kept custom schema file, open it and check whether it defines
+any of the following fields. If so, verify the field includes `"x-keyword": true`:
+
+| Field | Present in stock schema |
+|---|---|
+| `type` | `base.json`, `concept.json`, `doc.json`, `paper.json`, `section.json` |
+| `last_updated` | `base.json` |
+| `tags` | `base.json` |
+
+In 1.0.0, `base.json` added `"x-keyword": true` to `type`, `last_updated`,
+and `tags`; derived schemas (`concept`, `doc`, `paper`, `section`) added it
+to `type`. Custom schemas are standalone overlays — they do **not** inherit
+annotations from base automatically. A custom schema that defines `type`
+without `"x-keyword": true` will not be keyword-indexed.
+
+For each missing annotation, apply the fix inline:
+
+```json
+"type": {
+  "type": "string",
+  "x-keyword": true,
+  "description": "Page type from registry"
+}
+```
+
+After patching, ask the user to confirm the changes look correct, then commit
+the updated custom schemas with:
+```bash
+git -C "<wiki-path>" add schemas/
+git -C "<wiki-path>" commit -m "fix: add x-keyword annotations to custom schemas for 1.0.0 compatibility"
+```
+
+Then call `wiki_index_rebuild` for the affected wiki (pass `name=<wiki-name>`).
+The index must be rebuilt so keyword fields take effect — without this, pages
+already ingested will not be searchable by the newly annotated fields.
 
 ### Step 5 — Confirm before proceeding
 
