@@ -59,6 +59,7 @@ claude --plugin-dir ./llm-wiki-skills
 | `stats`           | `/llm-wiki:stats`          | Wiki health dashboard — interpret metrics and triage    |
 | `review`          | `/llm-wiki:review`         | Process drafts, low-confidence pages, lint findings     |
 | `export`          | `/llm-wiki:export`         | Export wiki to llms.txt, llms-full, or JSON             |
+| `migrate`         | `/llm-wiki:migrate`        | Remove redundant stock schema copies after upgrading to 1.0.0 |
 
 ## How Skills Relate to MCP Tools
 
@@ -78,6 +79,7 @@ orchestrate these tools into workflows.
 | Knowledge        | `wiki_stats` (health + structural topology), `wiki_suggest`, `wiki_history`                                       | content, research, bootstrap, lint, stats  |
 | Resolve          | `wiki_resolve`                                                                                                    | content, ingest                            |
 | Export           | `wiki_export`                                                                                                     | export                                     |
+| Migrate          | `wiki_migrate`, `wiki_spaces_list`                                                                                | migrate                                    |
 
 The engine is a dumb pipe. Skills are the brain.
 

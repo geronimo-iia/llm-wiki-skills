@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [1.0.0]
 
+### Added
+
+- **migrate skill** — guided migration to remove redundant stock schema copies after upgrading to 1.0.0; dry-run preview, custom-schema `x-keyword` annotation check, `wiki_index_rebuild` after patching, per-wiki git commit
+
 ### Changed
 
 - **all 17 skill files** — bumped `compatibility` to `llm-wiki >= 1.0.0`
