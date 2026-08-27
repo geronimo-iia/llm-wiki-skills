@@ -41,7 +41,7 @@ For narrow, specific queries, skip this step and go straight to search.
 ## Search
 
 BM25 full-text search across `title`, `summary`, `read_when`, `tldr`,
-`tags`, and body text. Results always include facets (`type`, `status`,
+`tags`, `aliases`, and body text. Results always include facets (`type`, `status`,
 `tags` distributions) — computed from FAST-field keyword indexes at no extra cost:
 
 ```

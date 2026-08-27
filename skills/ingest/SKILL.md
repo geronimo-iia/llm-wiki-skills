@@ -243,7 +243,7 @@ Write content directly to the returned `path` using your file tools
 For each page:
 - Set the correct `type`
 - Write all required fields for that type (the template shows them)
-- Add `sources`, `concepts`, `tags`, `confidence`, `claims` as relevant;
+- Add `sources`, `concepts`, `tags`, `aliases`, `confidence`, `claims` as relevant;
   set `confidence` to `0.5` on new pages (single source, unreviewed) and
   raise it only as corroborating evidence accumulates
 - Write a structured body — synthesize, do not copy verbatim
@@ -260,7 +260,7 @@ wiki_schema(action: "show", type: "<type>")
 **Updating an existing page (accumulation contract):**
 
 1. Read the current page first with `wiki_content_read`
-2. Preserve existing list values — do not drop `tags`, `read_when`,
+2. Preserve existing list values — do not drop `tags`, `aliases`, `read_when`,
    `sources`, `concepts`, or `claims` added by prior ingests
 3. Add new values to lists, do not replace them
 4. Update scalar fields (`summary`, `tldr`, `confidence`) only when

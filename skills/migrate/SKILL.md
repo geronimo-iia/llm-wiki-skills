@@ -78,6 +78,7 @@ any of the following fields. If so, verify the field includes `"x-keyword": true
 | `type` | `base.json`, `concept.json`, `doc.json`, `paper.json`, `section.json` |
 | `last_updated` | `base.json` |
 | `tags` | `base.json` |
+| `aliases` | `concept.json` |
 
 In 1.0.0, `base.json` added `"x-keyword": true` to `type`, `last_updated`,
 and `tags`; derived schemas (`concept`, `doc`, `paper`, `section`) added it
