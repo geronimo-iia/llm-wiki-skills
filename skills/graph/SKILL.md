@@ -5,7 +5,7 @@ description: >
   labeled edges, relation filtering, and subgraph extraction.
 type: skill
 status: active
-last_updated: "2026-07-25"
+last_updated: "2026-08-21"
 disable-model-invocation: false
 argument-hint: "[--type concept] [--root slug] [--depth N] [--relation fed-by]"
 when_to_use: >
@@ -14,7 +14,7 @@ when_to_use: >
   content changes.
 tags: [graph, visualization, structure, edges]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.5.1"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Graph
@@ -54,16 +54,22 @@ the wrong type.
 
 ## Generate the graph
 
-```
-wiki_graph()
-```
-
-Output format is `mermaid` (default), `dot`, or `llms`:
+### First call on any unfamiliar wiki
 
 ```
-wiki_graph(format: "mermaid")
-wiki_graph(format: "dot")
-wiki_graph(format: "llms")
+wiki_graph(format: "summary")
+```
+
+Returns aggregate metrics under 2KB — `nodes`, `edges`, `by_type`, `top_hubs` (top 10 by degree), `relation_counts`, `isolated_count`, `communities`. Use this to decide which filter to apply next before making a full graph call.
+
+Output format is `mermaid` (default), `dot`, `llms`, `json`, or `summary`:
+
+```
+wiki_graph(format: "summary")   # aggregate metrics, under 2KB — start here
+wiki_graph(format: "llms")      # natural language description, scoped subgraphs
+wiki_graph(format: "mermaid")   # renderable diagram, scoped subgraphs only
+wiki_graph(format: "dot")       # DOT diagram
+wiki_graph(format: "json")      # full node/edge JSON
 ```
 
 Mermaid output can be rendered directly in Markdown code blocks.
@@ -113,22 +119,14 @@ that the link exists but the target lives in another space.
 
 ## Interpret the graph
 
-For structural interpretation, use `format: "llms"` to get a natural
-language summary of the graph without requiring you to parse Mermaid:
+**Recommended call sequence:**
 
-```
-wiki_graph(format: "llms")
-```
+1. `wiki_graph(format: "summary")` — topology overview; identify dominant types, hub candidates, isolated count
+2. `wiki_graph(type: "<type>", format: "llms")` — scoped natural language description; isolated titles capped at 20
+3. `wiki_graph(root: "<slug>", depth: 2)` — subgraph for deep exploration
+4. `wiki_graph(format: "mermaid", root: "<slug>", depth: 2)` — renderable diagram of scoped subgraph only; avoid on full graph (exceeds context limits at scale)
 
-The output surfaces clusters (nodes grouped by type), key hubs (by
-degree), edge relation counts, and isolated nodes directly. Use it
-when the goal is analysis rather than visualization.
-
-For a renderable diagram (Mermaid, DOT), use the default format:
-
-```
-wiki_graph()
-```
+`format: "llms"` on unfiltered large wikis lists up to 20 isolated node titles then truncates with a count note directing to `wiki_lint`.
 
 Analyze the graph structure for:
 
@@ -142,11 +140,9 @@ Analyze the graph structure for:
 
 When the wiki has ≥ 30 pages, call `wiki_stats()` and read the `communities` field:
 
-- `isolated` — slugs in size-≤-2 communities; run `wiki_suggest` on each to find
-  connection candidates
 - `count` — how many clusters exist; high count with low `largest` means a fragmented wiki
-- `largest` / `smallest` — size range; a dominant cluster with many isolated pages
-  means there are unconnected drafts
+- `largest` / `smallest` — size range; a dominant cluster with many tiny communities means fragmentation
+- For isolated pages, use `wiki_lint(rules: "periphery,orphan")` — richer output than communities stats; then `wiki_suggest` on flagged slugs for connection candidates
 
 `wiki_suggest` results with `reason: "same knowledge cluster"` are cross-cluster
 candidates — thematically related pages with no direct link path. These are the

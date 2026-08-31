@@ -5,13 +5,13 @@ description: >
   the default wiki.
 type: skill
 status: active
-last_updated: "2026-05-04"
+last_updated: "2026-08-20"
 when_to_use: >
   Creating an additional wiki, listing registered wikis, inspecting
   a wiki, removing a wiki, or changing the default wiki.
 tags: [spaces, multi-wiki]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.4.0"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Spaces
@@ -112,6 +112,16 @@ when adopting an existing repository or syncing a cloned remote.
 ```
 wiki_spaces_set_default(name: "<name>")
 ```
+
+## Atomicity guarantees
+
+`wiki_spaces_create`, `wiki_spaces_register`, and `wiki_spaces_set_default`
+are atomic: if the disk write to `wiki.toml` fails after in-memory state is
+updated, the engine rolls back automatically. No manual recovery is needed.
+
+Concurrent space mutations are serialised by an internal lock. A rebuild
+triggered by file-watcher events on a newly mounted space runs after the
+space is fully mounted and registered.
 
 ## Remove a wiki
 

@@ -6,7 +6,7 @@ description: >
   metrics and decide what to fix next.
 type: skill
 status: active
-last_updated: "2026-05-04"
+last_updated: "2026-08-20"
 disable-model-invocation: false
 when_to_use: >
   Getting a quick health overview before a work session, deciding
@@ -14,7 +14,7 @@ when_to_use: >
   assessing structural quality of the knowledge graph.
 tags: [stats, health, graph, quality]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.4.0"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Stats
@@ -33,6 +33,13 @@ Target a specific wiki:
 wiki_stats(wiki: "research")
 ```
 
+Include the full center slug list (default returns `center_count` only):
+
+```
+wiki_stats(detail: "full")
+wiki_stats(wiki: "research", detail: "full")
+```
+
 ## Reading the output
 
 ### Page counts
@@ -43,7 +50,7 @@ stale: check `index.stale`. Rebuild with `wiki_index_rebuild` if needed.
 `sections` — section index pages. Excluded from most metrics (orphan
 check, staleness, structural rules) to avoid noise.
 
-`types` / `status` — facet distributions. High `draft` count → run
+`types` / `status` — facet distributions (keyword FAST fields — computed per segment, no stored-doc fetch). High `draft` count → run
 `wiki_lint(rules: "stale")` or audit drafts manually.
 
 ### Orphans and connectivity
@@ -98,8 +105,7 @@ wiki_index_rebuild(wiki: "research")
 {
   "count": 7,
   "largest": 34,
-  "smallest": 3,
-  "isolated": ["concepts/orphan-draft", "sources/tangent-2023"]
+  "smallest": 3
 }
 ```
 
@@ -107,13 +113,6 @@ wiki_index_rebuild(wiki: "research")
 |--------|---------------|
 | High `count`, low `largest` | Fragmented wiki — many small disconnected clusters |
 | Low `count`, very high `largest` | Monolithic — one dominant cluster, poor separation of concerns |
-| Non-empty `isolated` | Weakly connected pages — prime link candidates |
-
-For each `isolated` slug, run `wiki_suggest` to find connection candidates:
-
-```
-wiki_suggest(slug: "concepts/orphan-draft")
-```
 
 ### Structural topology
 
@@ -125,7 +124,7 @@ wiki_suggest(slug: "concepts/orphan-draft")
 {
   "diameter": 6.0,
   "radius": 3.0,
-  "center": ["concepts/core-concept"],
+  "center_count": 1,
   "structural_note": null
 }
 ```
@@ -134,8 +133,15 @@ wiki_suggest(slug: "concepts/orphan-draft")
 |-------|---------------|
 | `diameter` | Longest shortest path. High value (>8 on a 50-page wiki) = elongated chain graph |
 | `radius` | Minimum eccentricity. Close to `diameter` = no strong center |
-| `center` | Most central hub pages — linking sparse nodes through these shortens paths |
+| `center_count` | Number of most central hub pages in summary mode (default) |
+| `center` | Full slug list — only returned with `detail: "full"` |
 | `structural_note` | Non-null = O(n²) algorithms skipped due to graph size |
+
+Use `detail: "full"` to retrieve hub slugs by name:
+
+```
+wiki_stats(detail: "full")
+```
 
 `diameter ≈ radius` (within 1–2) on a well-connected wiki. Large gap
 means the graph has a tight core and a long tail of peripheral pages.
@@ -150,7 +156,7 @@ in config, or accept that topology fields are unavailable at that scale.
 index.stale = true          → wiki_index_rebuild first, then re-run stats
 orphans / pages > 0.2       → wiki_lint(rules: "orphan")
 stale_30d / pages > 0.3     → wiki_lint(rules: "stale")
-isolated communities        → wiki_suggest per isolated slug
+count high, smallest small  → wiki_lint(rules: "periphery") + wiki_suggest on findings
 diameter >> radius          → wiki_lint(rules: "periphery")
 articulation points likely  → wiki_lint(rules: "articulation-point,bridge")
 ```

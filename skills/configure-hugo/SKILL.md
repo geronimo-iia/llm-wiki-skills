@@ -11,7 +11,7 @@ status: active
 last_updated: "2026-05-04"
 tags: [hugo, publishing, configuration]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.4.0"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # configure-hugo

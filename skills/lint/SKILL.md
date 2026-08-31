@@ -6,7 +6,7 @@ description: >
   health (articulation points, bridges, peripheral pages).
 type: skill
 status: active
-last_updated: "2026-07-25"
+last_updated: "2026-08-20"
 disable-model-invocation: false
 when_to_use: >
   Auditing wiki structure, checking for broken links or orphan pages,
@@ -14,7 +14,7 @@ when_to_use: >
   changes.
 tags: [lint, audit, quality, structure]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.5.1"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Lint
@@ -25,11 +25,33 @@ offer fixes.
 ## Deterministic checks (engine)
 
 Start every audit by running the engine lint tool. These checks are
-index-based, deterministic, and fast:
+index-based, deterministic, and fast.
 
+**For small wikis (< 200 pages):**
 ```
 wiki_lint()
 ```
+
+**For large wikis (200+ pages): use the three-phase sequence to avoid
+oversized responses.**
+
+Phase 1 — triage (counts only, no findings):
+```
+wiki_lint(summary: true)
+```
+Returns `by_rule` counts. Identify which rule has the most findings before
+requesting the full list.
+
+Phase 2 — scope (single rule, optional subtree):
+```
+wiki_lint(rules: "missing-fields", path_prefix: "nrg-architecture/studies")
+```
+
+Phase 3 — paginate only if the scoped result is still large:
+```
+wiki_lint(rules: "missing-fields", path_prefix: "nrg-architecture/studies", page_size: 100)
+```
+Pass the returned `next_cursor` to the next call until `has_more` is false.
 
 This returns a JSON report with `findings` grouped by rule:
 
@@ -151,7 +173,7 @@ a source?
 wiki_stats()
 ```
 
-The `status` facet shows the distribution (e.g. `active: 40, draft: 3`).
+The `status` facet (keyword FAST field) shows the distribution (e.g. `active: 40, draft: 3`).
 Review draft pages: are they progressing, abandoned, or placeholders?
 
 ### Under-linked pages

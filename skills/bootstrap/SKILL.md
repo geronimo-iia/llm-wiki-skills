@@ -5,13 +5,13 @@ description: >
   structure, review hub pages.
 type: skill
 status: active
-last_updated: "2026-08-15"
+last_updated: "2026-08-20"
 when_to_use: >
   At the start of a session, when switching wikis, or when
   orientation to a wiki's structure and content is needed.
 tags: [bootstrap, session, orientation]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.5.7"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Bootstrap
@@ -26,12 +26,22 @@ Bring the agent from zero to oriented using the wiki itself.
 wiki_info()
 ```
 
-Returns server version, config path, registered spaces, default wiki,
-and index status (`"ok"` or `"degraded"`).
+Returns server version, registered spaces, default wiki, and index
+health. `index_status` is either `"ok"` (all wikis healthy) or an
+object keyed by wiki name when any wiki is degraded:
 
-If `index_status` is `"degraded"`, warn the user before proceeding:
-the index may be incomplete or stale, so stats and search results
-could be unreliable. Suggest running `wiki_index_rebuild()` to recover.
+```json
+{
+  "research": {"status": "ok"},
+  "notes": {"status": "degraded", "reason": "..."}
+}
+```
+
+If `index_status` is not the string `"ok"`, warn the user before
+proceeding: the affected wiki's index may be incomplete or stale, so
+stats and search results could be unreliable. Call
+`wiki_index_status(wiki: "<name>")` for details, then
+`wiki_index_rebuild(wiki: "<name>")` to recover.
 
 ### 1. Read configuration
 
@@ -88,5 +98,6 @@ Present a brief orientation:
 - The wiki's scope and purpose
 - What knowledge domains exist (from sections)
 - The current state (empty, sparse, well-developed) — use facets
-  for page counts per type
+  for page counts per type (`type`, `status`, `tags` are keyword
+  FAST fields; counts come at no extra cost)
 - Any recent activity (check `last_updated` on hub pages)

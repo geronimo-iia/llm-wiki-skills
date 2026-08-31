@@ -3,9 +3,9 @@
 Skills for the [llm-wiki](https://github.com/geronimo-iia/llm-wiki) engine.
 
 A Claude Code plugin that teaches agents how to use llm-wiki — manage
-spaces, ingest sources, crystallize sessions, search knowledge, audit
-structure, and more. Also usable by any agent platform that reads
-SKILL.md files.
+spaces, ingest sources, crystallize sessions, search knowledge, and audit
+structure. Any agent platform that reads SKILL.md files can use the skills
+directly.
 
 ## Prerequisites
 
@@ -59,6 +59,7 @@ claude --plugin-dir ./llm-wiki-skills
 | `stats`           | `/llm-wiki:stats`          | Wiki health dashboard — interpret metrics and triage    |
 | `review`          | `/llm-wiki:review`         | Process drafts, low-confidence pages, lint findings     |
 | `export`          | `/llm-wiki:export`         | Export wiki to llms.txt, llms-full, or JSON             |
+| `migrate`         | `/llm-wiki:migrate`        | Remove redundant stock schema copies after upgrading to 1.0.0 |
 
 ## How Skills Relate to MCP Tools
 
@@ -78,6 +79,7 @@ orchestrate these tools into workflows.
 | Knowledge        | `wiki_stats` (health + structural topology), `wiki_suggest`, `wiki_history`                                       | content, research, bootstrap, lint, stats  |
 | Resolve          | `wiki_resolve`                                                                                                    | content, ingest                            |
 | Export           | `wiki_export`                                                                                                     | export                                     |
+| Migrate          | `wiki_migrate`, `wiki_spaces_list`                                                                                | migrate                                    |
 
 The engine is a dumb pipe. Skills are the brain.
 
@@ -94,11 +96,17 @@ and work with any agent platform that reads Markdown skill files.
 | Custom agents     | MCP tools + parse SKILL.md frontmatter and body |
 | CLI scripts       | `llm-wiki` CLI commands directly                |
 
+## Extended Skills
+
+[geronimo-iia/agent-skills](https://github.com/geronimo-iia/agent-skills) is a companion plugin with opinionated workflows built on top of llm-wiki-skills:
+
+- **wiki-ingest-pdf** — add PDFs as wiki sources: extraction, structured analysis, index update, and ingest in one workflow
+- **research-paper** / **research-extraction** — process papers and multi-source corpora into confidence-annotated KB pages
+- **kb-conventions** — canonical KB layout, source schema, confidence markers, and synthesis rules that pair with the `ingest` and `crystallize` skills here
+
 ## License
 
 [MIT](LICENSE-MIT) OR [Apache-2.0](LICENSE-APACHE)
 
-## Future improvements
-
-See [docs/roadmap.md](docs/roadmap.md).
+See [docs/roadmap.md](docs/roadmap.md) for planned improvements.
 

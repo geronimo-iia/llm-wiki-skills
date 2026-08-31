@@ -13,7 +13,7 @@ when_to_use: >
   reference for correct frontmatter fields and conventions.
 tags: [frontmatter, reference, types]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.4.0"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Frontmatter Reference
@@ -94,6 +94,18 @@ Flat list, lowercase, hyphenated:
 ```yaml
 tags: [mixture-of-experts, scaling, transformers]
 ```
+
+### aliases
+
+Alternative names and synonyms for this concept — keyword-indexed, so
+synonym queries in `wiki_search` hit this field directly:
+
+```yaml
+aliases: [Mixture-of-Experts, MoE, sparse routing]
+```
+
+Use for acronyms, prior names, and common informal variants. Lowercase
+preferred but not required — BM25 keyword matching is exact on FAST fields.
 
 ### sources
 

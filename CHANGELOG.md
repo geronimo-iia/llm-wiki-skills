@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project adheres to [Semantic Versioning](https://semver.org).
 
+## [1.0.0] — 2026-08-31
+
+### Added
+
+- **migrate skill** — guided migration to remove redundant stock schema copies after upgrading to 1.0.0; dry-run preview, custom-schema `x-keyword` annotation check, `wiki_index_rebuild` after patching, per-wiki git commit
+
+### Changed
+
+- **all 17 skill files** — bumped `compatibility` to `llm-wiki >= 1.0.0`
+- **plugin.json** — bumped version to `1.0.0`
+- **research skill** — facet note: `type`, `status`, `tags` distributions computed from FAST-field keyword indexes at no extra cost
+- **bootstrap skill** — step 6: noted `type`, `status`, `tags` are keyword FAST fields; facet counts carry no extra overhead
+- **stats skill** — page counts section: `types` / `status` facet distributions are keyword FAST fields (no stored-doc fetch per segment)
+- **lint skill** — draft audit: `status` facet labelled as keyword FAST field
+- **schema skill** — added `## Keyword fields` section documenting `"x-keyword": true` on string scalar properties; covers FAST indexing, exact-match semantics, built-in fields (`type`, `status`, `tags`)
+- **spaces skill** — added `## Atomicity guarantees` section: `wiki_spaces_create`, `wiki_spaces_register`, `wiki_spaces_set_default` roll back automatically on disk failure; concurrent mutations serialised
+- **frontmatter/references/type-taxonomy.md** — noted `type` is indexed as keyword FAST field (exact-match, no text analysis, facet at no extra cost)
+- **bootstrap skill** — `wiki_info()` response: `config_path` field removed; `index_status` is now `"ok"` (flat string) or an object keyed by wiki name when any wiki is degraded; updated degradation check and recovery guidance to use `wiki_index_status(wiki:)` before rebuild
+- **config skill** — add `json` (and `llms`) to `graph.format` options; previously listed only `mermaid` and `dot`
+- **ingest skill** — Step 1.5 skip rules: document `skip_no_frontmatter` default (files without YAML frontmatter block are skipped at ingest; set `skip_no_frontmatter: false` to index them)
+- **README** — anti-slop pass (remove "and more" filler, drop single-line `## Future improvements` header); add Extended Skills section referencing geronimo-iia/agent-skills
+
 ## [0.5.7] — 2026-08-15
 
 ### Changed

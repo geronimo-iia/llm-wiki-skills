@@ -1,7 +1,8 @@
 # Type Taxonomy
 
 The `type` field carries the epistemic role. Classify by the source
-material's nature, not its topic.
+material's nature, not its topic. It is indexed as a keyword FAST field —
+exact-match filtering, no text analysis, and facet counts with no extra cost.
 
 Get a frontmatter template for any type:
 

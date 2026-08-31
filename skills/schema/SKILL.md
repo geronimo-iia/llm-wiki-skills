@@ -5,14 +5,14 @@ description: >
   discovery, field aliasing, graph edges, and schema operations.
 type: skill
 status: active
-last_updated: "2025-07-21"
+last_updated: "2026-08-20"
 when_to_use: >
   Understanding the type system, listing registered types, inspecting
   a type's schema or template, adding a custom type, removing a type,
   or validating schemas.
 tags: [schema, types, validation, type-system]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.4.0"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Schema
@@ -75,6 +75,34 @@ Resolution order:
 
 Common case: no `[types.*]` in `wiki.toml` — types are fully
 discovered from schema files.
+
+## Keyword fields
+
+String properties default to full-text analyzed indexing (BM25). Mark a
+property `"x-keyword": true` to index it as an exact-match keyword field:
+
+```json
+{
+  "properties": {
+    "domain": {
+      "type": "string",
+      "x-keyword": true
+    }
+  }
+}
+```
+
+Keyword fields:
+- Indexed as `STRING | STORED | FAST` — exact match, no tokenization
+- Appear in facet distributions (like `type` and `status`)
+- FAST storage means facet counts carry no extra segment pass overhead
+- Filtering is case-sensitive exact match — not partial-word
+
+Use `x-keyword: true` for controlled vocabulary fields (states, categories,
+enums). Leave plain `"type": "string"` for free-text prose fields.
+
+The built-in `type` and `status` fields use keyword indexing. `tags` uses
+keyword indexing on its array elements.
 
 ## Field aliasing
 

@@ -15,7 +15,7 @@ when_to_use: >
   content to the wiki.
 tags: [ingest, workflow, sources]
 owner: jguibert@gmail.com
-compatibility: "llm-wiki >= 0.5.1"
+compatibility: "llm-wiki >= 1.0.0"
 ---
 
 # Ingest
@@ -58,6 +58,7 @@ If no files are found, report "No files to process." and stop.
 - Binary files: `.pdf`, `.jpg`, `.jpeg`, `.png`, `.drawio`, `.gif`
 - Raw source `.txt` files when a higher-level analysis of the same source already exists in the queue
 - Deprecated documents superseded by a newer version — record as skipped with reason
+- Files without a `---` YAML frontmatter block when targeting a wiki with `skip_no_frontmatter: true` (the default) — these are skipped at ingest time; set `skip_no_frontmatter: false` in `[ingest]` to index them
 
 Process files one at a time — complete all sub-steps for one file
 before moving to the next.
@@ -243,7 +244,7 @@ Write content directly to the returned `path` using your file tools
 For each page:
 - Set the correct `type`
 - Write all required fields for that type (the template shows them)
-- Add `sources`, `concepts`, `tags`, `confidence`, `claims` as relevant;
+- Add `sources`, `concepts`, `tags`, `aliases`, `confidence`, `claims` as relevant;
   set `confidence` to `0.5` on new pages (single source, unreviewed) and
   raise it only as corroborating evidence accumulates
 - Write a structured body — synthesize, do not copy verbatim
@@ -260,7 +261,7 @@ wiki_schema(action: "show", type: "<type>")
 **Updating an existing page (accumulation contract):**
 
 1. Read the current page first with `wiki_content_read`
-2. Preserve existing list values — do not drop `tags`, `read_when`,
+2. Preserve existing list values — do not drop `tags`, `aliases`, `read_when`,
    `sources`, `concepts`, or `claims` added by prior ingests
 3. Add new values to lists, do not replace them
 4. Update scalar fields (`summary`, `tldr`, `confidence`) only when
