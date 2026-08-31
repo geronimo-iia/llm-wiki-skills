@@ -145,7 +145,7 @@ These keys can appear in both `config.toml` and `wiki.toml`.
 | `read.no_frontmatter` | `false` | Strip frontmatter from read output |
 | `ingest.auto_commit` | `true` | Commit to git after ingest |
 | `validation.type_strictness` | `loose` | `strict`: unknown type is error; `loose`: warning |
-| `graph.format` | `mermaid` | Graph output format: `mermaid` or `dot` |
+| `graph.format` | `mermaid` | Graph output format: `mermaid`, `dot`, `json`, or `llms` |
 | `graph.depth` | `3` | Default hop limit for graph traversal |
 | `graph.type` | `[]` | Page types to include; empty = all |
 | `graph.output` | `""` | Default output path; empty = stdout |

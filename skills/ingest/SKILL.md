@@ -58,6 +58,7 @@ If no files are found, report "No files to process." and stop.
 - Binary files: `.pdf`, `.jpg`, `.jpeg`, `.png`, `.drawio`, `.gif`
 - Raw source `.txt` files when a higher-level analysis of the same source already exists in the queue
 - Deprecated documents superseded by a newer version — record as skipped with reason
+- Files without a `---` YAML frontmatter block when targeting a wiki with `skip_no_frontmatter: true` (the default) — these are skipped at ingest time; set `skip_no_frontmatter: false` in `[ingest]` to index them
 
 Process files one at a time — complete all sub-steps for one file
 before moving to the next.
