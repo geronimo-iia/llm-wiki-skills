@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project adheres to [Semantic Versioning](https://semver.org).
 
-## [1.0.0]
+## [1.0.0] — 2026-08-31
 
 ### Added
 
@@ -23,6 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - **spaces skill** — added `## Atomicity guarantees` section: `wiki_spaces_create`, `wiki_spaces_register`, `wiki_spaces_set_default` roll back automatically on disk failure; concurrent mutations serialised
 - **frontmatter/references/type-taxonomy.md** — noted `type` is indexed as keyword FAST field (exact-match, no text analysis, facet at no extra cost)
 - **bootstrap skill** — `wiki_info()` response: `config_path` field removed; `index_status` is now `"ok"` (flat string) or an object keyed by wiki name when any wiki is degraded; updated degradation check and recovery guidance to use `wiki_index_status(wiki:)` before rebuild
+- **config skill** — add `json` (and `llms`) to `graph.format` options; previously listed only `mermaid` and `dot`
+- **ingest skill** — Step 1.5 skip rules: document `skip_no_frontmatter` default (files without YAML frontmatter block are skipped at ingest; set `skip_no_frontmatter: false` to index them)
+- **README** — anti-slop pass (remove "and more" filler, drop single-line `## Future improvements` header); add Extended Skills section referencing geronimo-iia/agent-skills
 
 ## [0.5.7] — 2026-08-15
 
